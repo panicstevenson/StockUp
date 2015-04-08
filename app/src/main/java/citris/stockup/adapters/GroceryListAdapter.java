@@ -20,19 +20,19 @@ import citris.stockup.views.GroceryListItem;
 public class GroceryListAdapter extends BaseAdapter{
 
     private ArrayList<Grocery> groceries;
-    private ArrayList<Grocery> storedGroceries = new ArrayList<Grocery>();
+    private ArrayList<Grocery> storedGroceries;
+    private ArrayList<Long> hiddenItems = new ArrayList<Long>();
     private Context context;
 
     public GroceryListAdapter(ArrayList<Grocery> groceries, Context context) {
         super();
         this.groceries = groceries;
         this.context = context;
-        this.storedGroceries.addAll(groceries);
     }
 
     @Override
     public int getCount() {
-        return groceries.size();
+        return groceries.size() - hiddenItems.size();
     }
 
     @Override
@@ -40,13 +40,27 @@ public class GroceryListAdapter extends BaseAdapter{
         if (null == groceries) {
             return null;
         } else {
-            return groceries.get(position);
-        }
+            /*for (Long hiddenIndex : hiddenItems) {
+                if (hiddenIndex == position) {
+                    position++;
+                }
+            }
+        }*/
+        return groceries.get(position); }
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        boolean hidden = false;
+        for (Long hiddenIndex : hiddenItems) {
+            if (hiddenIndex == position){
+                hidden = true;
+            }
+        }
+        if (!hidden) {
+            return position;
+        }
+        return 0;
     }
 
     @Override
@@ -85,21 +99,34 @@ public class GroceryListAdapter extends BaseAdapter{
         return completedIds.toArray(new Long[]{});
     }
 
-    public void searchGroceries(String query) {
+    public void searchGroceries(String query)
+    {
         query = query.toLowerCase();
-        Log.v("GroceryListAdapter", String.valueOf(groceries.size()));
-        groceries.clear();
+        /*Log.v("MyListAdapter", String.valueOf(groceries.size()));
+        groceries.clear();*/
 
-        if (query.isEmpty()) {
-            groceries.addAll(storedGroceries);
-        } else {
-            for (Grocery grocery : storedGroceries) {
+        if (!query.isEmpty()) {
+            for (Grocery grocery : groceries) {
                 if (grocery.getName().toLowerCase().contains(query)) {
-                    groceries.add(grocery);
+                    hiddenItems.add(grocery.getId());
                 }
             }
+        } else {
+            hiddenItems.clear();
         }
-        Log.v("GroceryListAdapter", String.valueOf(groceries.size()));
+                /*if(newList.size() > 0) {
+                    Grocery nContinent = new Continent(grocery.getName(), newList);
+                    groceries.add(nContinent);
+                }*/
+//        Log.v("MyListAdapter", String.valueOf(groceries.size()));
         notifyDataSetChanged();
+    }
+
+    public void storeGroceries() {
+        storedGroceries = groceries;
+    }
+
+    public void restoreGroceries() {
+        groceries = storedGroceries;
     }
 }

@@ -7,7 +7,6 @@ public class Grocery {
     private String name;
     private boolean complete;
     private long id;
-    private boolean hidden = false;
 
     public Grocery(String groceryName) {
         name = groceryName;
@@ -28,10 +27,6 @@ public class Grocery {
     public boolean isComplete() {
         return complete;
     }
-    
-    public boolean isHidden() {
-        return hidden;
-    }
 
     public void setComplete(boolean complete) {
         this.complete = complete;
@@ -47,9 +42,5 @@ public class Grocery {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
     }
 }
