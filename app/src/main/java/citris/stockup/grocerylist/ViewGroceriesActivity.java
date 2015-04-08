@@ -1,5 +1,6 @@
 package citris.stockup.grocerylist;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Context;
@@ -37,12 +38,15 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
         setContentView(R.layout.activity_list_view);
         setViews();
 
+        getActionBar().hide();
+
         searchView = (SearchView)findViewById(R.id.grocery_search);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(true);
         searchView.setOnCloseListener(this);
         searchView.setOnQueryTextListener(this);
+        searchView.setQueryHint("Search grocery list...");
         app = (GroceryListApplication)getApplication();
         adapter = new GroceryListAdapter(app.getCurrentGroceries(), this);
         setListAdapter(adapter);
@@ -76,7 +80,6 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.storeGroceries();
                 Intent intent = new Intent(ViewGroceriesActivity.this, AddGroceryActivity.class);
                 startActivity(intent);
             }
@@ -90,9 +93,8 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_list_view, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

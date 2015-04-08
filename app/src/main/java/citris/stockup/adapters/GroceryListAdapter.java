@@ -20,47 +20,32 @@ import citris.stockup.views.GroceryListItem;
 public class GroceryListAdapter extends BaseAdapter{
 
     private ArrayList<Grocery> groceries;
-    private ArrayList<Grocery> storedGroceries;
-    private ArrayList<Long> hiddenItems = new ArrayList<Long>();
+    private ArrayList<Grocery> storedGroceries = new ArrayList<Grocery>();
     private Context context;
 
     public GroceryListAdapter(ArrayList<Grocery> groceries, Context context) {
         super();
         this.groceries = groceries;
         this.context = context;
+        this.storedGroceries.addAll(groceries);
     }
 
     @Override
     public int getCount() {
-        return groceries.size() - hiddenItems.size();
+        return groceries.size();
     }
 
     @Override
     public Grocery getItem(int position) {
         if (null == groceries) {
             return null;
-        } else {
-            /*for (Long hiddenIndex : hiddenItems) {
-                if (hiddenIndex == position) {
-                    position++;
-                }
-            }
-        }*/
-        return groceries.get(position); }
+        }
+        return groceries.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        boolean hidden = false;
-        for (Long hiddenIndex : hiddenItems) {
-            if (hiddenIndex == position){
-                hidden = true;
-            }
-        }
-        if (!hidden) {
-            return position;
-        }
-        return 0;
+        return position;
     }
 
     @Override
@@ -99,34 +84,20 @@ public class GroceryListAdapter extends BaseAdapter{
         return completedIds.toArray(new Long[]{});
     }
 
-    public void searchGroceries(String query)
-    {
+    public void searchGroceries(String query){
         query = query.toLowerCase();
-        /*Log.v("MyListAdapter", String.valueOf(groceries.size()));
-        groceries.clear();*/
-
-        if (!query.isEmpty()) {
-            for (Grocery grocery : groceries) {
+        Log.v("GroceryListAdapter", String.valueOf(groceries.size()));
+        groceries.clear();
+        if (query.isEmpty()) {
+            groceries.addAll(storedGroceries);
+        } else {
+            for (Grocery grocery : storedGroceries) {
                 if (grocery.getName().toLowerCase().contains(query)) {
-                    hiddenItems.add(grocery.getId());
+                    groceries.add(grocery);
                 }
             }
-        } else {
-            hiddenItems.clear();
         }
-                /*if(newList.size() > 0) {
-                    Grocery nContinent = new Continent(grocery.getName(), newList);
-                    groceries.add(nContinent);
-                }*/
-//        Log.v("MyListAdapter", String.valueOf(groceries.size()));
+        Log.v("GroceryListAdapter", String.valueOf(groceries.size()));
         notifyDataSetChanged();
-    }
-
-    public void storeGroceries() {
-        storedGroceries = groceries;
-    }
-
-    public void restoreGroceries() {
-        groceries = storedGroceries;
     }
 }

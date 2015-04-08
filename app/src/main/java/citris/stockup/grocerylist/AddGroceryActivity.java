@@ -35,6 +35,7 @@ public class AddGroceryActivity extends GroceryListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_grocery);
         setViews();
+        getActionBar().hide();
     }
 
     private void addGrocery() {
