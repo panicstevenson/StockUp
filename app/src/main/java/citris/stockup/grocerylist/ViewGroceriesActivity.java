@@ -76,6 +76,7 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                adapter.storeGroceries();
                 Intent intent = new Intent(ViewGroceriesActivity.this, AddGroceryActivity.class);
                 startActivity(intent);
             }
