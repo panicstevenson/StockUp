@@ -1,23 +1,18 @@
 package citris.stockup.grocerylist;
 
-import android.app.ActionBar;
 import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.TextView;
 
 import citris.stockup.R;
 import citris.stockup.adapters.GroceryListAdapter;
@@ -31,12 +26,15 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
     private GroceryListAdapter adapter;
     private Button checkoutButton;
     private SearchView searchView;
+    private TextView textview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_view);
         setViews();
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Vollkorn-Regular.ttf");
+        textview.setTypeface(tf);
 
         getActionBar().hide();
 
@@ -77,6 +75,7 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
     private void setViews() {
         addButton = (Button)findViewById(R.id.add_grocery);
         checkoutButton = (Button)findViewById(R.id.checkout);
+        textview = (TextView)findViewById(R.id.grocery_list);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -61,6 +61,8 @@ public class GroceryListAdapter extends BaseAdapter{
     }
 
     public void forceReload() {
+        storedGroceries.clear();
+        this.storedGroceries.addAll(groceries);
         notifyDataSetChanged();
     }
 
@@ -80,7 +82,7 @@ public class GroceryListAdapter extends BaseAdapter{
             }
         }
         groceries.removeAll(checkoutGroceries);
-        notifyDataSetChanged();
+        forceReload();
         return completedIds.toArray(new Long[]{});
     }
 

@@ -3,6 +3,7 @@ package citris.stockup.grocerylist;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.os.Bundle;
 import android.text.Editable;
@@ -36,6 +37,8 @@ public class AddGroceryActivity extends GroceryListActivity {
         setContentView(R.layout.add_grocery);
         setViews();
         getActionBar().hide();
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Vollkorn-Regular.ttf");
+        addButton.setTypeface(tf);
     }
 
     private void addGrocery() {

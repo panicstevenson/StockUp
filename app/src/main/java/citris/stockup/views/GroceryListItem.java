@@ -37,6 +37,6 @@ public class GroceryListItem extends LinearLayout {
         this.grocery = grocery;
         checkbox.setText(grocery.getName());
         checkbox.setChecked(grocery.isComplete());
-        subtext.setText(grocery.getId()+"");
+        subtext.setText("ItemID: " + grocery.getId());
     }
 }
