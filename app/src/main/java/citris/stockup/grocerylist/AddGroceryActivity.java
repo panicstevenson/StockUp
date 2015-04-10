@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import citris.stockup.R;
 import citris.stockup.groceries.Grocery;
@@ -24,6 +25,8 @@ public class AddGroceryActivity extends GroceryListActivity {
 
     private static final int REQUEST_CHOOSE_ADDRESS = 0;
     private EditText groceryNameEditText;
+    private EditText brandEditText;
+    private EditText categoryEditText;
     private Button addButton;
     private Button cancelButton;
     private TextView groceryText;
@@ -43,9 +46,13 @@ public class AddGroceryActivity extends GroceryListActivity {
 
     private void addGrocery() {
         String groceryName = groceryNameEditText.getText().toString();
-        Grocery g = new Grocery(groceryName);
-        getGroceryListApplication().addGrocery(g);
-        finish();
+        if (!groceryName.isEmpty()) {
+            Grocery g = new Grocery(groceryName);
+            getGroceryListApplication().addGrocery(g);
+            finish();
+        } else {
+            Toast.makeText(getApplicationContext(), "ERROR: Invalid grocery name.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void cancel() {
@@ -54,21 +61,21 @@ public class AddGroceryActivity extends GroceryListActivity {
             .setTitle(R.string.unsaved_changes_title)
             .setMessage(R.string.unsaved_changes_message)
 //          Add
-            .setNeutralButton(R.string.button_add, new AlertDialog.OnClickListener() {
+            .setNegativeButton(R.string.button_add, new AlertDialog.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     addGrocery();
-                }
-            })
-//          Discard
-            .setNegativeButton(R.string.button_discard, new AlertDialog.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
                 }
             })
 //          Cancel
             .setPositiveButton(R.string.button_cancel, new AlertDialog.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     unsavedChangesDialog.cancel();
+                }
+            })
+//          Discard
+            .setNeutralButton(R.string.button_discard, new AlertDialog.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
                 }
             })
             .create();
@@ -80,6 +87,8 @@ public class AddGroceryActivity extends GroceryListActivity {
 
     private void setViews() {
         groceryNameEditText = (EditText)findViewById(R.id.grocery_edit_name);
+        brandEditText = (EditText)findViewById(R.id.grocery_edit_brand);
+        categoryEditText = (EditText)findViewById(R.id.edit_category);
         addButton = (Button)findViewById(R.id.add_button);
         cancelButton = (Button)findViewById(R.id.cancel_button);
 

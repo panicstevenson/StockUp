@@ -27,7 +27,7 @@
 
     <EditText
         android:id="@+id/grocery_edit_name"
-        android:text="@string/dummy_grocery"
+        android:hint="@string/grocery_name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/grocery_name"
@@ -85,7 +85,7 @@
 
     <EditText
         android:id="@+id/grocery_edit_brand"
-        android:text="@string/dummy_brand"
+        android:hint="@string/brand_name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/brand"
@@ -133,7 +133,7 @@
 
     <EditText
         android:id="@+id/edit_category"
-        android:text="@string/category"
+        android:hint="@string/category"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/category"

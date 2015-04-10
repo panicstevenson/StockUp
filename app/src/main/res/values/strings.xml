@@ -34,5 +34,6 @@
     <string name="category">Category/Aisle</string>
     <string name="quantity">Quantity</string>
     <string name="stockup">StockUp</string>
+    <string name="brand_name">Brand Name</string>
 
 </resources>
