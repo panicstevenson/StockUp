@@ -3,17 +3,16 @@
 
     <string name="app_name">StockUp</string>
 
-    <!--Buttons-->
+    <!-- Buttons -->
     <string name="button_add">Add</string>
     <string name="button_discard">Discard</string>
     <string name="button_add_grocery">Add Grocery</string>
     <string name="button_checkout">Checkout</string>
     <string name="button_cancel">Cancel</string>
 
-    <!--Dialog-->
+    <!-- Dialog -->
     <string name="unsaved_changes_title">Unsaved Changes</string>
     <string name="unsaved_changes_message">You have unsaved changes, would you like to add this grocery or discard it?</string>
-
     <string name="open">Welcome to the StockUp grocery organizer!</string>
     <string name="add_view_text">Add Grocery</string>
     <string name="dummy_grocery">Milk</string>
@@ -35,5 +34,6 @@
     <string name="quantity">Quantity</string>
     <string name="stockup">StockUp</string>
     <string name="brand_name">Brand Name</string>
+    <string name="title_activity_google_play_services">GooglePlayServicesActivity</string>
 
 </resources>
