@@ -19,24 +19,27 @@
         android:layout_height="wrap_content"
         android:id="@+id/grocery_search"
         android:paddingTop="8dp"
-        android:layout_toLeftOf="@+id/imageButton"
+        android:layout_toLeftOf="@+id/checkout"
         android:layout_below="@id/grocery_list"
         />
 
-    <ImageButton
+    <Button
+        android:id="@id/checkout"
+        android:text="@string/button_checkout"
+        android:layout_marginTop="6sp"
+        android:layout_below="@id/grocery_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@id/imageButton"
-        android:layout_marginTop="6dp"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/grocery_list"
-        android:src="@drawable/settings_cog"
         />
 
     <ListView
         android:id="@id/android:list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
+        android:divider="@color/material_blue_grey_800"
+        android:dividerHeight="0.5dp"
         android:layout_below="@id/grocery_search"
         android:layout_above="@+id/add_grocery"
         />
@@ -55,21 +58,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        />
-
-    <Button
-        android:id="@+id/checkout"
-        android:text="@string/button_checkout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         />
 
-
-
-
+    <Button
+        android:id="@+id/suggest_grocery"
+        android:text="@string/suggest_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        />
 
 
 </RelativeLayout>

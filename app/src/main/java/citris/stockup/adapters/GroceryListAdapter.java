@@ -73,7 +73,7 @@ public class GroceryListAdapter extends BaseAdapter{
     }
 
     public Long[] checkoutGroceries() {
-        ArrayList<Long> completedIds = new ArrayList<Long>();
+        ArrayList<String> completedIds = new ArrayList<String>();
         ArrayList<Grocery> checkoutGroceries = new ArrayList<Grocery>();
         for (Grocery grocery : groceries){
             if (grocery.isComplete()) {
@@ -88,7 +88,6 @@ public class GroceryListAdapter extends BaseAdapter{
 
     public void searchGroceries(String query){
         query = query.toLowerCase();
-        Log.v("GroceryListAdapter", String.valueOf(groceries.size()));
         groceries.clear();
         if (query.isEmpty()) {
             groceries.addAll(storedGroceries);
@@ -99,7 +98,6 @@ public class GroceryListAdapter extends BaseAdapter{
                 }
             }
         }
-        Log.v("GroceryListAdapter", String.valueOf(groceries.size()));
         notifyDataSetChanged();
     }
 }

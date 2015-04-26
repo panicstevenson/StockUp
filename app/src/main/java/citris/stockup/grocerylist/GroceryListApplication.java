@@ -4,7 +4,24 @@ import android.app.Application;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
 import java.util.ArrayList;
+import java.util.List;
+
+import citris.stockup.R;
+import citris.stockup.adapters.GroceryListAdapter;
 import citris.stockup.groceries.GroceriesSQLiteOpenHelper;
 import citris.stockup.groceries.Grocery;
 
@@ -16,7 +33,8 @@ import static citris.stockup.groceries.GroceriesSQLiteOpenHelper.*;
 
 public class GroceryListApplication extends Application {
 
-    private ArrayList<Grocery> currentGroceries;
+    public ArrayList<ArrayList<Grocery>> currentGroceryLists = new ArrayList<ArrayList<Grocery>>();
+    public ArrayList<Grocery> currentGroceries = new ArrayList<Grocery>();
     private SQLiteDatabase database;
 
     @Override
@@ -24,32 +42,39 @@ public class GroceryListApplication extends Application {
         super.onCreate();
         GroceriesSQLiteOpenHelper helper = new GroceriesSQLiteOpenHelper(this);
         database = helper.getWritableDatabase();
-        if (null == currentGroceries) {
-            loadGroceries();
-        }
+
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this, "0BqEQPyE7ycnXnarj1YgsGkvgzAlj8tJtkogFQL3", "388Timb3JFccZseI0M0pj92egGqd5DBaHpLr9qVV");
+        //ParseUser.enableAutomaticUser();
+
+        updateData();
     }
 
-    private void loadGroceries() {
-        currentGroceries = new ArrayList<Grocery>();
-        Cursor groceryCursor = database.query(
-                GROCERY_TABLE, new String[] {GROCERY_ID, GROCERY_NAME, GROCERY_COMPLETE},
-                null, null, null, null,
-                String.format("%s, %s", GROCERY_COMPLETE, GROCERY_NAME));
-        groceryCursor.moveToFirst();
-        Grocery g;
-        if (! groceryCursor.isAfterLast()) {
-            do {
-                long id = groceryCursor.getLong(0);
-                String name = groceryCursor.getString(1);
-                String boolValue = groceryCursor.getString(2);
-                boolean complete = Boolean.parseBoolean(boolValue);
-                g = new Grocery(name);
-                g.setId(id);
-                g.setComplete(complete);
-                currentGroceries.add(g);
-            } while (groceryCursor.moveToNext());
-        }
-        groceryCursor.close();
+    public void updateData(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Grocery");
+        query.orderByAscending(GROCERY_NAME);
+        query.findInBackground(new FindCallback<ParseObject>() {
+
+            @Override
+            public void done(List<ParseObject> groceries, ParseException error) {
+                try {
+                    if(groceries != null) {
+                        currentGroceries.clear();
+                        for (int i = 0; i < groceries.size(); i++) {
+                            ParseObject p = groceries.get(i);
+                            Grocery g = new Grocery(p.getString(GROCERY_NAME), p.getInt(GROCERY_QUANTITY_INT), p.getInt(GROCERY_QUANTITY_TYPE), p.getString(GROCERY_BRAND), p.getInt(GROCERY_PAST_TTL), p.getInt(GROCERY_PAST_TTL_TYPE), p.getString(GROCERY_CATEGORY), p.getObjectId());
+                            currentGroceries.add(g);
+                        }
+                    }
+                } catch (UnsupportedOperationException e) {
+                    //Toast
+                }
+            }
+        });
+    }
+
+    public ArrayList<ArrayList<Grocery>> getCurrentGroceryLists() {
+        return currentGroceryLists;
     }
 
     public ArrayList<Grocery> getCurrentGroceries() {
@@ -63,13 +88,55 @@ public class GroceryListApplication extends Application {
     public void addGrocery(Grocery g){
         assert(null != g);
 
-        ContentValues values = new ContentValues();
-        values.put(GROCERY_NAME, g.getName());
-        values.put(GROCERY_COMPLETE, Boolean.toString(g.isComplete()));
-        long id = database.insert(GROCERY_TABLE, null, values);
-        g.setId(id);
+        ParseObject groceryItem = new ParseObject("Grocery");
+        groceryItem.put(GROCERY_NAME, g.getName());
+        groceryItem.put(GROCERY_QUANTITY_INT, g.getQuantityInt());
+        groceryItem.put(GROCERY_QUANTITY_TYPE, g.getQuantityType());
+        groceryItem.put(GROCERY_BRAND, g.getBrand());
+        groceryItem.put(GROCERY_PAST_TTL, g.getTtlInt());
+        groceryItem.put(GROCERY_PAST_TTL_TYPE, g.getTtlType());
+        groceryItem.put(GROCERY_CATEGORY, g.getCategory());
+        groceryItem.put(GROCERY_TTL, g.getTTL());
+        groceryItem.put(GROCERY_COMPLETE, Boolean.toString(g.isComplete()));
+
+        groceryItem.pinInBackground();
+        groceryItem.saveEventually();
+
         currentGroceries.add(g);
     }
+
+    public void editGrocery(int pos, String groceryName, int quantityInt, int quantityType, String brandName, int ttlInt, int ttlType, String categoryName) {
+        final Grocery g = currentGroceries.get(pos);
+
+        g.setName(groceryName);
+        g.setQuantityInt(quantityInt);
+        g.setQuantityType(quantityType);
+        g.setBrand(brandName);
+        g.setTtlInt(ttlInt);
+        g.setTtlType(ttlType);
+        g.setCategory(categoryName);
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Grocery");
+        query.getInBackground(g.getId(), new GetCallback<ParseObject>() {
+            public void done(ParseObject groceryItem, ParseException e) {
+                if (e == null) {
+                    groceryItem.put(GROCERY_NAME, g.getName());
+                    groceryItem.put(GROCERY_QUANTITY_INT, g.getQuantityInt());
+                    groceryItem.put(GROCERY_QUANTITY_TYPE, g.getQuantityType());
+                    groceryItem.put(GROCERY_BRAND, g.getBrand());
+                    groceryItem.put(GROCERY_PAST_TTL, g.getTtlInt());
+                    groceryItem.put(GROCERY_PAST_TTL_TYPE, g.getTtlType());
+                    groceryItem.put(GROCERY_CATEGORY, g.getCategory());
+                    groceryItem.put(GROCERY_TTL, g.getTTL());
+                    groceryItem.put(GROCERY_COMPLETE, Boolean.toString(g.isComplete()));
+                    groceryItem.saveInBackground();
+                } else {
+                    //fill
+                }
+            }
+        });
+    }
+
 
     public void saveGrocery(Grocery g){
         assert(null != g);
@@ -77,9 +144,9 @@ public class GroceryListApplication extends Application {
         ContentValues values = new ContentValues();
         values.put(GROCERY_NAME, g.getName());
         values.put(GROCERY_COMPLETE, Boolean.toString(g.isComplete()));
-        long id = g.getId();
+        //long id = g.getId();
         String where = String.format("%s = ?", GROCERY_ID);
-        database.update(GROCERY_TABLE, values, where, new String[]{id+""});
+        //database.update(GROCERY_TABLE, values, where, new String[]{id+""});
     }
 
     public void deleteGroceries(Long[] ids) {

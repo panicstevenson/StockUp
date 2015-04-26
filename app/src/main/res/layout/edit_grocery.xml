@@ -5,11 +5,9 @@
     android:layout_height="match_parent"
     >
 
-
-
     <TextView
         android:id="@+id/add_grocery_text"
-        android:text="@string/add_view_text"
+        android:text="Edit Grocery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -22,17 +20,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/add_grocery_text"
-        android:textSize="24sp"
-        />
-
-    <ImageButton
-        android:id="@+id/barcode"
-        android:background="@drawable/barcode_ico"
-        android:layout_width="80sp"
-        android:layout_height="50sp"
-        android:layout_marginLeft="72sp"
-        android:layout_marginTop="24sp"
-        android:layout_toRightOf="@id/add_grocery_text"
         android:textSize="24sp"
         />
 
@@ -57,8 +44,8 @@
         />
 
     <Button
-        android:id="@+id/add_button"
-        android:text="@string/button_add_grocery"
+        android:id="@+id/edit_button"
+        android:text="Edit Grocery"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

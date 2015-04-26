@@ -3,8 +3,6 @@ package citris.stockup.grocerylist;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.location.Address;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,18 +19,14 @@ import citris.stockup.groceries.Grocery;
 import citris.stockup.scanner.CameraActivity;
 
 /**
- * Created by Panic on 4/6/2015.
+ * Created by Panic on 4/25/2015.
  */
-
-public class AddGroceryActivity extends GroceryListActivity {
-
+public class EditGroceryActivity extends AddGroceryActivity {
     private EditText groceryNameEditText;
     private EditText brandEditText;
     private EditText categoryEditText;
-    private Button addButton;
+    private Button editButton;
     private Button cancelButton;
-    private ImageButton barcodeButton;
-    private TextView groceryText;
     protected boolean changesPending;
     private AlertDialog unsavedChangesDialog;
     private Spinner quantityIntSpinner;
@@ -40,17 +34,16 @@ public class AddGroceryActivity extends GroceryListActivity {
     private Spinner quantityTypeSpinner;
     private Spinner ttlTypeSpinner;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_grocery);
+        setContentView(R.layout.edit_grocery);
         setViews();
         getActionBar().hide();
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Vollkorn-Regular.ttf");
-        addButton.setTypeface(tf);
     }
 
-    private void addGrocery() {
+    private void editGrocery(int pos) {
         String groceryName = groceryNameEditText.getText().toString();
         int ttlType = ttlTypeSpinner.getSelectedItemPosition();
         int ttlInt = ttlIntSpinner.getSelectedItemPosition() + 1;
@@ -60,38 +53,37 @@ public class AddGroceryActivity extends GroceryListActivity {
         String categoryName = categoryEditText.getText().toString();
 
         if (!groceryName.isEmpty()) {
-            Grocery g = new Grocery(groceryName, quantityInt, quantityType, brandName, ttlInt, ttlType, categoryName);
-            getGroceryListApplication().addGrocery(g);
+            getGroceryListApplication().editGrocery(pos, groceryName, quantityInt, quantityType, brandName, ttlInt, ttlType, categoryName);
             finish();
         } else {
             Toast.makeText(getApplicationContext(), "ERROR: Invalid grocery name.", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void cancel() {
+    private void cancel(final int pos) {
         if (changesPending){
             unsavedChangesDialog = new AlertDialog.Builder(this)
-            .setTitle(R.string.unsaved_changes_title)
-            .setMessage(R.string.unsaved_changes_message)
+                    .setTitle(R.string.unsaved_changes_title)
+                    .setMessage(R.string.unsaved_changes_message)
 //          Add
-            .setNegativeButton(R.string.button_add, new AlertDialog.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    addGrocery();
-                }
-            })
+                    .setNegativeButton(R.string.button_add, new AlertDialog.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            editGrocery(pos);
+                        }
+                    })
 //          Cancel
-            .setPositiveButton(R.string.button_cancel, new AlertDialog.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    unsavedChangesDialog.cancel();
-                }
-            })
+                    .setPositiveButton(R.string.button_cancel, new AlertDialog.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            unsavedChangesDialog.cancel();
+                        }
+                    })
 //          Discard
-            .setNeutralButton(R.string.button_discard, new AlertDialog.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            })
-            .create();
+                    .setNeutralButton(R.string.button_discard, new AlertDialog.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .create();
             unsavedChangesDialog.show();
         } else {
             finish();
@@ -99,6 +91,9 @@ public class AddGroceryActivity extends GroceryListActivity {
     }
 
     private void setViews() {
+        final Grocery g = getIntent().getParcelableExtra("tmpGrocery");
+        final int pos = getIntent().getIntExtra("position", 0);
+
         groceryNameEditText = (EditText)findViewById(R.id.grocery_edit_name);
         quantityIntSpinner = (Spinner)findViewById(R.id.quantity_int);
         quantityTypeSpinner = (Spinner)findViewById(R.id.quantity_type);
@@ -106,31 +101,29 @@ public class AddGroceryActivity extends GroceryListActivity {
         ttlIntSpinner = (Spinner)findViewById(R.id.ttl_int);
         ttlTypeSpinner = (Spinner)findViewById(R.id.ttl_type);
         categoryEditText = (EditText)findViewById(R.id.edit_category);
-        addButton = (Button)findViewById(R.id.add_button);
+        editButton = (Button)findViewById(R.id.edit_button);
         cancelButton = (Button)findViewById(R.id.cancel_button);
-        barcodeButton = (ImageButton)findViewById(R.id.barcode);
 
-        addButton.setOnClickListener(new View.OnClickListener() {
+        groceryNameEditText.setText(g.getName());
+        quantityIntSpinner.setSelection(g.getQuantityInt() - 1);
+        quantityTypeSpinner.setSelection(g.getQuantityTypePos());
+        brandEditText.setText(g.getBrand());
+        ttlIntSpinner.setSelection(g.getTtlInt() - 1);
+        ttlTypeSpinner.setSelection(g.getTtlTypePos());
+        categoryEditText.setText(g.getCategory());
+
+
+        editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addGrocery();
+                editGrocery(pos);
             }
         });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancel();
-            }
-        });
-
-        barcodeButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Intent in = new Intent(AddGroceryActivity.this, CameraActivity.class);
-                startActivity(in);
+                cancel(pos);
             }
         });
 

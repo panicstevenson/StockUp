@@ -13,6 +13,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import static citris.stockup.groceries.GroceriesSQLiteOpenHelper.*;
+
+
+import com.parse.Parse;
+import com.parse.ParseObject;
 
 import citris.stockup.R;
 import citris.stockup.adapters.GroceryListAdapter;
@@ -45,6 +50,7 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
         searchView.setOnCloseListener(this);
         searchView.setOnQueryTextListener(this);
         searchView.setQueryHint("Search grocery list...");
+
         app = (GroceryListApplication)getApplication();
         adapter = new GroceryListAdapter(app.getCurrentGroceries(), this);
         setListAdapter(adapter);
@@ -53,9 +59,16 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        adapter.toggleTaskCompleteAtPosition(position);
+        Intent intent = new Intent(ViewGroceriesActivity.this, ItemDetailActivity.class);
+        //adapter.toggleTaskCompleteAtPosition(position);
         Grocery g = adapter.getItem(position);
-        app.saveGrocery(g);
+
+        intent.putExtra("tmpGrocery", g);
+        intent.putExtra("position", position);
+        startActivity(intent);
+        //app.viewGrocery(g);
+        //app.saveGrocery(g);
+
     }
 
     @Override

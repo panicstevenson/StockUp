@@ -66,6 +66,12 @@
         <item name="android:dropDownSelector">@drawable/selectable_background_stockup</item>
     </style>
 
+    <style name="LoginFormContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
     <style name="ProgressBar.Stockup" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progress_horizontal_stockup</item>
     </style>

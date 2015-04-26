@@ -16,6 +16,16 @@ public class GroceriesSQLiteOpenHelper extends SQLiteOpenHelper {
     public static final String GROCERY_ID = "id";
     public static final String GROCERY_NAME = "name";
     public static final String GROCERY_COMPLETE = "complete";
+    public static final String GROCERY_QUANTITY_INT = "quantity";
+    public static final String GROCERY_QUANTITY_TYPE = "quantityType";
+    public static final String GROCERY_BRAND = "brand";
+    public static final String GROCERY_CATEGORY = "category";
+    public static final String GROCERY_TTL = "TTL";
+
+    //Save the user's preference for ttl
+    public static final String GROCERY_PAST_TTL = "pastTTL";
+    public static final String GROCERY_PAST_TTL_TYPE = "pastTTLType";
+
 
     public GroceriesSQLiteOpenHelper(Context context) {
         super(context, DB_NAME, null, VERSION);
