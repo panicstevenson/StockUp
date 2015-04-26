@@ -24,6 +24,7 @@ import citris.stockup.R;
 import citris.stockup.adapters.GroceryListAdapter;
 import citris.stockup.groceries.GroceriesSQLiteOpenHelper;
 import citris.stockup.groceries.Grocery;
+import citris.stockup.groceries.GroceryList;
 
 import static citris.stockup.groceries.GroceriesSQLiteOpenHelper.*;
 
@@ -33,7 +34,7 @@ import static citris.stockup.groceries.GroceriesSQLiteOpenHelper.*;
 
 public class GroceryListApplication extends Application {
 
-    public ArrayList<ArrayList<Grocery>> currentGroceryLists = new ArrayList<ArrayList<Grocery>>();
+    public ArrayList<GroceryList> currentGroceryLists = new ArrayList<GroceryList>();
     public ArrayList<Grocery> currentGroceries = new ArrayList<Grocery>();
     private SQLiteDatabase database;
 
@@ -45,25 +46,46 @@ public class GroceryListApplication extends Application {
 
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "0BqEQPyE7ycnXnarj1YgsGkvgzAlj8tJtkogFQL3", "388Timb3JFccZseI0M0pj92egGqd5DBaHpLr9qVV");
-        //ParseUser.enableAutomaticUser();
+        ParseUser.enableAutomaticUser();
 
         updateData();
     }
 
     public void updateData(){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Grocery");
-        query.orderByAscending(GROCERY_NAME);
-        query.findInBackground(new FindCallback<ParseObject>() {
-
+        ParseQuery<ParseObject> listQuery = ParseQuery.getQuery("List");
+        listQuery.whereEqualTo("key", "pstevenson");    //TODO MAKE DYNAMIC
+        listQuery.orderByAscending("name");
+        listQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
-            public void done(List<ParseObject> groceries, ParseException error) {
+            public void done(List<ParseObject> lists, ParseException error) {
                 try {
-                    if(groceries != null) {
-                        currentGroceries.clear();
-                        for (int i = 0; i < groceries.size(); i++) {
-                            ParseObject p = groceries.get(i);
-                            Grocery g = new Grocery(p.getString(GROCERY_NAME), p.getInt(GROCERY_QUANTITY_INT), p.getInt(GROCERY_QUANTITY_TYPE), p.getString(GROCERY_BRAND), p.getInt(GROCERY_PAST_TTL), p.getInt(GROCERY_PAST_TTL_TYPE), p.getString(GROCERY_CATEGORY), p.getObjectId());
-                            currentGroceries.add(g);
+                    if(lists != null) {
+                        currentGroceryLists.clear();
+                        for (int i = 0; i < lists.size(); i++) {
+                            ParseObject temp = lists.get(i);
+
+                            ParseQuery<ParseObject> query = ParseQuery.getQuery("Grocery");
+                            query.whereEqualTo("tableid", temp.getString("name"));
+                            query.orderByAscending(GROCERY_NAME);
+                            query.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> groceries, ParseException error) {
+                                    try {
+                                        if(groceries != null) {
+                                            currentGroceries.clear();
+                                            for (int i = 0; i < groceries.size(); i++) {
+                                                ParseObject p = groceries.get(i);
+                                                Grocery g = new Grocery(p.getString(GROCERY_NAME), p.getInt(GROCERY_QUANTITY_INT), p.getInt(GROCERY_QUANTITY_TYPE), p.getString(GROCERY_BRAND), p.getInt(GROCERY_PAST_TTL), p.getInt(GROCERY_PAST_TTL_TYPE), p.getString(GROCERY_CATEGORY), p.getObjectId());
+                                                currentGroceries.add(g);
+                                            }
+                                        }
+                                    } catch (UnsupportedOperationException e) {
+                                        //Toast
+                                    }
+                                }
+                            });
+                            GroceryList gl = new GroceryList(temp.getString("name"), currentGroceries);
+                            currentGroceryLists.add(gl);
                         }
                     }
                 } catch (UnsupportedOperationException e) {
@@ -71,9 +93,10 @@ public class GroceryListApplication extends Application {
                 }
             }
         });
+        currentGroceries.clear();
     }
 
-    public ArrayList<ArrayList<Grocery>> getCurrentGroceryLists() {
+    public ArrayList<GroceryList> getCurrentGroceryLists() {
         return currentGroceryLists;
     }
 

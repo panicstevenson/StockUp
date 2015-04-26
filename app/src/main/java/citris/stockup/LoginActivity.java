@@ -25,6 +25,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import citris.stockup.grocerylist.ViewGroceriesActivity;
+import citris.stockup.grocerylist.ViewListsActivity;
 
 public class LoginActivity extends Activity {
     Button btn_LoginIn = null;
@@ -191,7 +192,7 @@ public class LoginActivity extends Activity {
 
     protected void loginSuccessful() {
         // TODO Auto-generated method stub
-        Intent in =  new Intent(LoginActivity.this, ViewGroceriesActivity.class);
+        Intent in =  new Intent(LoginActivity.this, ViewListsActivity.class);
         startActivity(in);
     }
     protected void loginUnSuccessful() {

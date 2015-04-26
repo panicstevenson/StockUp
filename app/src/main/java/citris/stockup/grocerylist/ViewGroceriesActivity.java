@@ -21,6 +21,7 @@ import com.parse.ParseObject;
 
 import citris.stockup.R;
 import citris.stockup.adapters.GroceryListAdapter;
+import citris.stockup.adapters.ListListAdapter;
 import citris.stockup.groceries.Grocery;
 
 
