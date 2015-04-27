@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import citris.stockup.grocerylist.ViewGroceriesActivity;
+import citris.stockup.grocerylist.ViewListsActivity;
 
 public class SignUpActivity extends Activity implements OnClickListener{
     private EditText mUserNameEditText;
@@ -151,7 +152,7 @@ public class SignUpActivity extends Activity implements OnClickListener{
             public void done(ParseException e) {
                 if (e == null) {
                     signUpMsg("Account Created Successfully");
-                    Intent in = new Intent(getApplicationContext(), ViewGroceriesActivity.class);
+                    Intent in = new Intent(getApplicationContext(), ViewListsActivity.class);
                     startActivity(in);
                 } else {
                     // Sign up didn't succeed. Look at the ParseException

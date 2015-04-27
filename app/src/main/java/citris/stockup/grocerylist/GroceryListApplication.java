@@ -53,8 +53,9 @@ public class GroceryListApplication extends Application {
     }
 
     public void updateData(){
+        ParseUser p = ParseUser.getCurrentUser();
         ParseQuery<ParseObject> listQuery = ParseQuery.getQuery("List");
-        listQuery.whereEqualTo("key", "pstevenson");    //TODO MAKE DYNAMIC
+        listQuery.whereEqualTo("key", p.getUsername());    //TODO MAKE DYNAMIC
         listQuery.orderByAscending("name");
         listQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
