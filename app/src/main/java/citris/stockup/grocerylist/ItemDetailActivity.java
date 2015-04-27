@@ -24,6 +24,7 @@ public class ItemDetailActivity extends Activity {
     private TextView groceryCategory;
     private Button editButton;
     private Button backButton;
+    private TextView groceryId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class ItemDetailActivity extends Activity {
         groceryCategory = (TextView) findViewById(R.id.insert_category);
         editButton = (Button) findViewById(R.id.edit_button);
         backButton = (Button) findViewById(R.id.back_button);
+        groceryId = (TextView) findViewById(R.id.insert_id);
 
         final Grocery g = getIntent().getParcelableExtra("tmpGrocery");
         final int pos = getIntent().getIntExtra("position", 0);
@@ -53,6 +55,7 @@ public class ItemDetailActivity extends Activity {
         groceryTtlInt.setText("" + g.getTtlInt());
         groceryTtlType.setText(g.getTtlType());
         groceryCategory.setText(g.getCategory());
+        groceryId.setText(g.getId());
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override

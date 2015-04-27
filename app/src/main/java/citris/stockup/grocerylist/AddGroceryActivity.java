@@ -51,6 +51,8 @@ public class AddGroceryActivity extends GroceryListActivity {
     }
 
     private void addGrocery() {
+        final String listName = getIntent().getStringExtra("listName");
+
         String groceryName = groceryNameEditText.getText().toString();
         int ttlType = ttlTypeSpinner.getSelectedItemPosition();
         int ttlInt = ttlIntSpinner.getSelectedItemPosition() + 1;
@@ -61,6 +63,7 @@ public class AddGroceryActivity extends GroceryListActivity {
 
         if (!groceryName.isEmpty()) {
             Grocery g = new Grocery(groceryName, quantityInt, quantityType, brandName, ttlInt, ttlType, categoryName);
+            g.setList(listName);
             getGroceryListApplication().addGrocery(g);
             finish();
         } else {

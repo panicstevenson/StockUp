@@ -16,6 +16,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,16 +47,15 @@ public class GroceryListApplication extends Application {
 
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "0BqEQPyE7ycnXnarj1YgsGkvgzAlj8tJtkogFQL3", "388Timb3JFccZseI0M0pj92egGqd5DBaHpLr9qVV");
-        ParseUser.enableAutomaticUser();
+        //ParseUser.enableAutomaticUser();
 
         updateData();
         inflateLists();
     }
 
     public void updateData(){
-        ParseUser p = ParseUser.getCurrentUser();
         ParseQuery<ParseObject> listQuery = ParseQuery.getQuery("List");
-        listQuery.whereEqualTo("key", p.getUsername());    //TODO MAKE DYNAMIC
+        listQuery.whereContains("key", ParseUser.getCurrentUser().getUsername());
         listQuery.orderByAscending("name");
         listQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -76,7 +76,8 @@ public class GroceryListApplication extends Application {
                                         if (groceries != null) {
                                             for (int i = 0; i < groceries.size(); i++) {
                                                 ParseObject p = groceries.get(i);
-                                                Grocery g = new Grocery(p.getString(GROCERY_NAME), p.getInt(GROCERY_QUANTITY_INT), p.getInt(GROCERY_QUANTITY_TYPE), p.getString(GROCERY_BRAND), p.getInt(GROCERY_PAST_TTL), p.getInt(GROCERY_PAST_TTL_TYPE), p.getString(GROCERY_CATEGORY), p.getObjectId());
+                                                Grocery g = new Grocery(p.getString(GROCERY_NAME), p.getInt(GROCERY_QUANTITY_INT), p.getInt(GROCERY_QUANTITY_TYPE), p.getString(GROCERY_BRAND), p.getInt(GROCERY_PAST_TTL), p.getInt(GROCERY_PAST_TTL_TYPE), p.getString(GROCERY_CATEGORY));
+                                                g.setId(p.getObjectId());
                                                 g.setList(p.getString("tableid"));
                                                 currentGroceries.add(g);
                                             }
@@ -125,21 +126,31 @@ public class GroceryListApplication extends Application {
         ParseObject groceryItem = new ParseObject("Grocery");
         groceryItem.put(GROCERY_NAME, g.getName());
         groceryItem.put(GROCERY_QUANTITY_INT, g.getQuantityInt());
-        groceryItem.put(GROCERY_QUANTITY_TYPE, g.getQuantityType());
+        groceryItem.put(GROCERY_QUANTITY_TYPE, g.getQuantityTypePos());
         groceryItem.put(GROCERY_BRAND, g.getBrand());
         groceryItem.put(GROCERY_PAST_TTL, g.getTtlInt());
-        groceryItem.put(GROCERY_PAST_TTL_TYPE, g.getTtlType());
+        groceryItem.put(GROCERY_PAST_TTL_TYPE, g.getTtlTypePos());
         groceryItem.put(GROCERY_CATEGORY, g.getCategory());
         groceryItem.put(GROCERY_TTL, g.getTTL());
         groceryItem.put(GROCERY_COMPLETE, Boolean.toString(g.isComplete()));
+        groceryItem.put(GROCERY_LIST, g.getList());
 
-        groceryItem.pinInBackground();
-        groceryItem.saveEventually();
+//        groceryItem.pinInBackground();
+        groceryItem.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException err) {
+                if (err == null) {
+                    //happy
+                } else {
+                    Log.d("cheese", "Add broke because: " + err.getMessage());
+                }
+            }
+        });
 
         currentGroceries.add(g);
     }
 
-    public void editGrocery(int pos, String groceryName, int quantityInt, int quantityType, String brandName, int ttlInt, int ttlType, String categoryName) {
+    public void editGrocery(int pos, String groceryName, int quantityInt, int quantityType, String brandName, int ttlInt, int ttlType, String categoryName, String id, String list) {
         final Grocery g = currentGroceries.get(pos);
 
         g.setName(groceryName);
@@ -149,23 +160,33 @@ public class GroceryListApplication extends Application {
         g.setTtlInt(ttlInt);
         g.setTtlType(ttlType);
         g.setCategory(categoryName);
+        String temp = g.getId();
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Grocery");
-        query.getInBackground(g.getId(), new GetCallback<ParseObject>() {
+        ParseQuery<ParseObject> get = ParseQuery.getQuery("Grocery");
+        get.getInBackground(temp, new GetCallback<ParseObject>() {
             public void done(ParseObject groceryItem, ParseException e) {
                 if (e == null) {
                     groceryItem.put(GROCERY_NAME, g.getName());
                     groceryItem.put(GROCERY_QUANTITY_INT, g.getQuantityInt());
-                    groceryItem.put(GROCERY_QUANTITY_TYPE, g.getQuantityType());
+                    groceryItem.put(GROCERY_QUANTITY_TYPE, g.getQuantityTypePos());
                     groceryItem.put(GROCERY_BRAND, g.getBrand());
                     groceryItem.put(GROCERY_PAST_TTL, g.getTtlInt());
-                    groceryItem.put(GROCERY_PAST_TTL_TYPE, g.getTtlType());
+                    groceryItem.put(GROCERY_PAST_TTL_TYPE, g.getTtlTypePos());
                     groceryItem.put(GROCERY_CATEGORY, g.getCategory());
                     groceryItem.put(GROCERY_TTL, g.getTTL());
                     groceryItem.put(GROCERY_COMPLETE, Boolean.toString(g.isComplete()));
-                    groceryItem.saveInBackground();
+                    groceryItem.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException err) {
+                           if (err == null) {
+                               //happy
+                           } else {
+                               Log.d("cheese", "Err broke because: " + err.getMessage());
+                           }
+                        }
+                    });
                 } else {
-                    //fill
+                    Log.d("cheese", "E broke because: " + e.getMessage());
                 }
             }
         });

@@ -21,6 +21,7 @@ public class GroceriesSQLiteOpenHelper extends SQLiteOpenHelper {
     public static final String GROCERY_BRAND = "brand";
     public static final String GROCERY_CATEGORY = "category";
     public static final String GROCERY_TTL = "TTL";
+    public static final String GROCERY_LIST = "tableid";
 
     //Save the user's preference for ttl
     public static final String GROCERY_PAST_TTL = "pastTTL";

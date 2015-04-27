@@ -79,6 +79,9 @@ public class SignUpActivity extends Activity implements OnClickListener{
                             "You don't have internet connection.", false);
                 }
                 break;
+            case R.id.cancel_btn:
+                finish();
+                break;
             default:
                 break;
         }

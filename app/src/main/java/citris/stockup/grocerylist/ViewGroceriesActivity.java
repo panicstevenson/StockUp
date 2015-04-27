@@ -87,13 +87,16 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
     }
 
     private void setViews() {
+        final String listName = getIntent().getStringExtra("listName");
         addButton = (Button)findViewById(R.id.add_grocery);
         checkoutButton = (Button)findViewById(R.id.checkout);
         textview = (TextView)findViewById(R.id.grocery_list);
+        textview.setText(listName);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ViewGroceriesActivity.this, AddGroceryActivity.class);
+                intent.putExtra("listName", listName);
                 startActivity(intent);
             }
         });

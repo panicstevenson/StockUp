@@ -14,6 +14,8 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.parse.ParseUser;
+
 import citris.stockup.R;
 import citris.stockup.adapters.GroceryListAdapter;
 import citris.stockup.adapters.ListListAdapter;
@@ -33,7 +35,7 @@ public class ViewListsActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_view);
+        setContentView(R.layout.list_list_view);
         setViews();
 
         getActionBar().hide();
@@ -53,7 +55,7 @@ public class ViewListsActivity extends ListActivity {
         //adapter.toggleTaskCompleteAtPosition(position);
 
 
-        //intent.putExtra("tmpGrocery", g);
+        intent.putExtra("listName", listAdapter.getItem(position).getName());
         //intent.putExtra("position", position);
         startActivity(intent);
         //app.viewGrocery(g);
@@ -68,6 +70,9 @@ public class ViewListsActivity extends ListActivity {
     }
 
     private void setViews() {
+        textview = (TextView)findViewById(R.id.grocery_list);
+        textview.setText(ParseUser.getCurrentUser().getUsername() + "'s Lists");
+
         /*addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -33,6 +33,8 @@ public class EditGroceryActivity extends AddGroceryActivity {
     private Spinner ttlIntSpinner;
     private Spinner quantityTypeSpinner;
     private Spinner ttlTypeSpinner;
+    private String idHolder;
+    private String listHolder;
 
 
     @Override
@@ -53,7 +55,7 @@ public class EditGroceryActivity extends AddGroceryActivity {
         String categoryName = categoryEditText.getText().toString();
 
         if (!groceryName.isEmpty()) {
-            getGroceryListApplication().editGrocery(pos, groceryName, quantityInt, quantityType, brandName, ttlInt, ttlType, categoryName);
+            getGroceryListApplication().editGrocery(pos, groceryName, quantityInt, quantityType, brandName, ttlInt, ttlType, categoryName, idHolder, listHolder);
             finish();
         } else {
             Toast.makeText(getApplicationContext(), "ERROR: Invalid grocery name.", Toast.LENGTH_SHORT).show();
@@ -92,6 +94,8 @@ public class EditGroceryActivity extends AddGroceryActivity {
 
     private void setViews() {
         final Grocery g = getIntent().getParcelableExtra("tmpGrocery");
+        idHolder = g.getId();
+        listHolder = g.getList();
         final int pos = getIntent().getIntExtra("position", 0);
 
         groceryNameEditText = (EditText)findViewById(R.id.grocery_edit_name);
