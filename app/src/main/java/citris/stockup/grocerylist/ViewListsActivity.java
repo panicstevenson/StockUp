@@ -41,15 +41,17 @@ public class ViewListsActivity extends ListActivity {
         app = (GroceryListApplication)getApplication();
         listAdapter = new ListListAdapter(app.getCurrentGroceryLists(), this);
         setListAdapter(listAdapter);
+        app.inflateLists();
     }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        Intent intent = new Intent(ViewListsActivity.this, ViewGroceriesActivity.class);
-        //adapter.toggleTaskCompleteAtPosition(position);
         GroceryList gl = listAdapter.getItem(position);
         app.setCurrentGroceries(gl.getContents());
+        Intent intent = new Intent(ViewListsActivity.this, ViewGroceriesActivity.class);
+        //adapter.toggleTaskCompleteAtPosition(position);
+
 
         //intent.putExtra("tmpGrocery", g);
         //intent.putExtra("position", position);

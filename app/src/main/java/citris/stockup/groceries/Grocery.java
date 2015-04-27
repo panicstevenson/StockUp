@@ -17,6 +17,7 @@ public class Grocery implements Parcelable {
     private int quantityInt;
     private int quantityType;
     private int ttl;
+    private String list;
 
     private boolean complete;
     private String id;
@@ -185,6 +186,14 @@ public class Grocery implements Parcelable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getList() {
+        return list;
+    }
+
+    public void setList(String list) {
+        this.list = list;
     }
 
     public int getTTL() {

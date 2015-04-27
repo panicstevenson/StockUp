@@ -99,7 +99,8 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
         });
         checkoutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                checkoutGroceries();
+                finish();
+                //checkoutGroceries();
             }
         });
     }

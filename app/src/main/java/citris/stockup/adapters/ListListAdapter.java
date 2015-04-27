@@ -19,7 +19,7 @@ import citris.stockup.views.GroceryLists;
 
 public class ListListAdapter extends BaseAdapter{
 
-    private ArrayList<GroceryList> list;
+    private ArrayList<GroceryList> list = new ArrayList<GroceryList>();
     private Context context;
 
     public ListListAdapter(ArrayList<GroceryList> list, Context context) {

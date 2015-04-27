@@ -9,9 +9,18 @@ public class GroceryList {
     private String name;
     private ArrayList<Grocery> contents;
 
+    public GroceryList(String name){
+        this.name = name;
+        this.contents = new ArrayList<Grocery>();
+    }
+
     public GroceryList(String name, ArrayList<Grocery> contents) {
         this.name = name;
         this.contents = contents;
+    }
+
+    public void addGrocery (Grocery g) {
+        this.contents.add(g);
     }
 
     public String getName() {

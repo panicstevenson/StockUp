@@ -49,6 +49,7 @@ public class GroceryListApplication extends Application {
         ParseUser.enableAutomaticUser();
 
         updateData();
+        inflateLists();
     }
 
     public void updateData(){
@@ -59,7 +60,7 @@ public class GroceryListApplication extends Application {
             @Override
             public void done(List<ParseObject> lists, ParseException error) {
                 try {
-                    if(lists != null) {
+                    if (lists != null) {
                         currentGroceryLists.clear();
                         for (int i = 0; i < lists.size(); i++) {
                             ParseObject temp = lists.get(i);
@@ -71,11 +72,11 @@ public class GroceryListApplication extends Application {
                                 @Override
                                 public void done(List<ParseObject> groceries, ParseException error) {
                                     try {
-                                        if(groceries != null) {
-                                            currentGroceries.clear();
+                                        if (groceries != null) {
                                             for (int i = 0; i < groceries.size(); i++) {
                                                 ParseObject p = groceries.get(i);
                                                 Grocery g = new Grocery(p.getString(GROCERY_NAME), p.getInt(GROCERY_QUANTITY_INT), p.getInt(GROCERY_QUANTITY_TYPE), p.getString(GROCERY_BRAND), p.getInt(GROCERY_PAST_TTL), p.getInt(GROCERY_PAST_TTL_TYPE), p.getString(GROCERY_CATEGORY), p.getObjectId());
+                                                g.setList(p.getString("tableid"));
                                                 currentGroceries.add(g);
                                             }
                                         }
@@ -84,7 +85,7 @@ public class GroceryListApplication extends Application {
                                     }
                                 }
                             });
-                            GroceryList gl = new GroceryList(temp.getString("name"), currentGroceries);
+                            GroceryList gl = new GroceryList(temp.getString("name"));
                             currentGroceryLists.add(gl);
                         }
                     }
@@ -93,7 +94,16 @@ public class GroceryListApplication extends Application {
                 }
             }
         });
-        currentGroceries.clear();
+    }
+
+    public void inflateLists() {
+        for (int i = 0; i < currentGroceryLists.size(); i++) {
+            for (int j = 0; j < currentGroceries.size(); j++) {
+                if (currentGroceryLists.get(i).getName().equals(currentGroceries.get(j).getList())) {
+                    currentGroceryLists.get(i).addGrocery(currentGroceries.get(j));
+                }
+            }
+        }
     }
 
     public ArrayList<GroceryList> getCurrentGroceryLists() {
