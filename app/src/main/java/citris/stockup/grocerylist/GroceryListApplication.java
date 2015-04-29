@@ -204,6 +204,42 @@ public class GroceryListApplication extends Application {
         //database.update(GROCERY_TABLE, values, where, new String[]{id+""});
     }
 
+    public void removeGrocery (int position) {
+        final Grocery g = currentGroceries.get(position);
+        ParseQuery<ParseObject> get = ParseQuery.getQuery("Grocery");
+        String temp = g.getId();
+
+        get.getInBackground(temp, new GetCallback<ParseObject>() {
+            public void done(ParseObject groceryItem, ParseException e) {
+                groceryItem.deleteInBackground();
+            }
+        });
+        currentGroceries.remove(position);
+    }
+
+    public void checkout() {
+        for(int i = 0; i < currentGroceries.size(); i++) {
+            if(currentGroceries.get(i).isComplete()){
+                final Grocery g = currentGroceries.get(i);
+                String temp = g.getId();
+
+                g.setTtlInt(g.getTtlInt());
+                g.setTtlType(g.getQuantityTypePos());
+
+                ParseQuery<ParseObject> get = ParseQuery.getQuery("Grocery");
+
+                get.getInBackground(temp, new GetCallback<ParseObject>() {
+                    public void done(ParseObject groceryItem, ParseException e) {
+                        groceryItem.increment(GROCERY_TTL, g.getTTL());
+                        groceryItem.put(GROCERY_PAST_TTL, g.getTtlInt());
+                        groceryItem.put(GROCERY_PAST_TTL_TYPE, g.getTtlType());
+                        groceryItem.saveInBackground();
+                    }
+                });
+            }
+        }
+    }
+
     public void deleteGroceries(Long[] ids) {
         StringBuffer idList = new StringBuffer();
         for (int i = 0; i < ids.length; i++) {

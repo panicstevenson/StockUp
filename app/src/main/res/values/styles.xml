@@ -34,6 +34,7 @@
         <!-- Light.DarkActionBar specific -->
         <item name="android:actionBarWidgetTheme">@style/Theme.Stockup.Widget</item>
 
+
     </style>
 
     <style name="ActionBar.Solid.Stockup" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
@@ -41,29 +42,41 @@
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_stockup</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_stockup</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Stockup</item>
+        <item name="android:textSize">44sp</item>
+
     </style>
 
     <style name="ActionBar.Transparent.Stockup" parent="@android:style/Widget.Holo.ActionBar">
         <item name="android:background">@drawable/ab_transparent_stockup</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Stockup</item>
+        <item name="android:textSize">44sp</item>
+
     </style>
 
     <style name="PopupMenu.Stockup" parent="@android:style/Widget.Holo.ListPopupWindow">
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_stockup</item>
+        <item name="android:textSize">44sp</item>
+
     </style>
 
     <style name="DropDownListView.Stockup" parent="@android:style/Widget.Holo.ListView.DropDown">
         <item name="android:listSelector">@drawable/selectable_background_stockup</item>
+        <item name="android:textSize">44sp</item>
+
     </style>
 
     <style name="ActionBarTabStyle.Stockup" parent="@android:style/Widget.Holo.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_stockup</item>
+        <item name="android:textSize">44sp</item>
+
     </style>
 
     <style name="DropDownNav.Stockup" parent="@android:style/Widget.Holo.Spinner">
         <item name="android:background">@drawable/spinner_background_ab_stockup</item>
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_stockup</item>
         <item name="android:dropDownSelector">@drawable/selectable_background_stockup</item>
+        <item name="android:textSize">44sp</item>
+
     </style>
 
     <style name="LoginFormContainer">
@@ -84,6 +97,8 @@
     <style name="Theme.Stockup.Widget" parent="@android:style/Theme.Holo">
         <item name="android:popupMenuStyle">@style/PopupMenu.Stockup</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Stockup</item>
+        <item name="android:textSize">44sp</item>
+
     </style>
 
 </resources>

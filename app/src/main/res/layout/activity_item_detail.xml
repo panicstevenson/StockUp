@@ -6,13 +6,23 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="citris.stockup.grocerylist.ItemDetailActivity">
 
+    <Button
+        android:id="@+id/back_button"
+        android:text="Back"
+        android:layout_marginTop="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        />
+
     <TextView
         android:id="@+id/grocery_details"
         android:text="Grocery Details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginLeft="12dp"
+        android:layout_marginTop="16dp"
+        android:layout_toRightOf="@id/back_button"
+
         android:textSize="36sp" />
 
     <TextView
@@ -163,8 +173,8 @@
         />
 
     <Button
-        android:id="@+id/back_button"
-        android:text="Back"
+        android:id="@+id/remove_button"
+        android:text="Remove Grocery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

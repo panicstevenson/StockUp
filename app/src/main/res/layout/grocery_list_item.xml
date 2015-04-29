@@ -4,20 +4,49 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="54dp">
+
+    <TextView
+        android:id="@+id/bar"
+        android:layout_marginLeft="2dp"
+        android:layout_width="6dp"
+        android:layout_height="fill_parent"
+        android:background="@color/material_blue_grey_800"
+        />
+
     <CheckedTextView
         android:id="@android:id/text1"
+        android:text="test me"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:textSize="22sp"
+        android:layout_toRightOf="@id/bar"
         android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+        android:checkMarkTint="#ff0e8022"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="-6dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="8dp"
         />
-
     <TextView
         android:id="@android:id/text2"
+        android:text="test me 2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_below="@android:id/text1"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="1dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="16dp"
+        />
+</RelativeLayout>
+
+
+
 
 </citris.stockup.views.GroceryListItem>

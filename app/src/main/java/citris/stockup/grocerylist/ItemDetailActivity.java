@@ -13,7 +13,7 @@ import android.widget.TextView;
 import citris.stockup.R;
 import citris.stockup.groceries.Grocery;
 
-public class ItemDetailActivity extends Activity {
+public class ItemDetailActivity extends GroceryListActivity {
 
     private TextView groceryName;
     private TextView groceryQuantityInt;
@@ -25,11 +25,13 @@ public class ItemDetailActivity extends Activity {
     private Button editButton;
     private Button backButton;
     private TextView groceryId;
+    private Button removeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         setViews();
     }
 
@@ -43,6 +45,7 @@ public class ItemDetailActivity extends Activity {
         groceryCategory = (TextView) findViewById(R.id.insert_category);
         editButton = (Button) findViewById(R.id.edit_button);
         backButton = (Button) findViewById(R.id.back_button);
+        removeButton = (Button) findViewById(R.id.remove_button);
         groceryId = (TextView) findViewById(R.id.insert_id);
 
         final Grocery g = getIntent().getParcelableExtra("tmpGrocery");
@@ -74,6 +77,14 @@ public class ItemDetailActivity extends Activity {
                 finish();
             }
         });
+
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getGroceryListApplication().removeGrocery(pos);
+                finish();
+            }
+        });
     }
 
 
@@ -86,16 +97,12 @@ public class ItemDetailActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }
