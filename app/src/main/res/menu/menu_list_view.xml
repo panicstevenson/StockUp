@@ -10,8 +10,8 @@
 
     <item android:id="@+id/action_search"
         android:icon="@android:drawable/ic_menu_search"
-        android:title="Search"
-        app:showAsAction="always|collapseActionView"
+        android:title="Logout"
+        app:showAsAction="never"
         android:orderInCategory="1"
         app:actionViewClass="android.support.v7.widget.SearchView"
         />

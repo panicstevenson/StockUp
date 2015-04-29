@@ -5,24 +5,14 @@
     android:layout_height="match_parent"
     >
 
-
-
     <TextView
-        android:id="@+id/add_grocery_text"
-        android:text="@string/add_view_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginLeft="12dp"
-        android:textSize="36sp" />
-
-    <TextView
+        android:layout_marginTop="24dp"
         android:id="@+id/grocery_name"
         android:text="@string/grocery_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/add_grocery_text"
         android:textSize="24sp"
+        android:layout_marginLeft="8dp"
         />
 
     <ImageButton
@@ -30,9 +20,10 @@
         android:background="@drawable/barcode_ico"
         android:layout_width="80sp"
         android:layout_height="50sp"
-        android:layout_marginLeft="72sp"
-        android:layout_marginTop="24sp"
-        android:layout_toRightOf="@id/add_grocery_text"
+        android:layout_marginLeft="12sp"
+        android:layout_marginTop="36sp"
+        android:layout_marginRight="24sp"
+        android:layout_alignParentRight="true"
         android:textSize="24sp"
         />
 
@@ -42,8 +33,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/grocery_name"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="64dp"
+        android:layout_toLeftOf="@id/barcode"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="12dp"
         />
 
     <TextView
@@ -54,15 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/grocery_edit_name"
         android:textSize="24sp"
-        />
-
-    <Button
-        android:id="@+id/add_button"
-        android:text="@string/button_add_grocery"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/cancel_button"
+        android:layout_marginLeft="8dp"
         />
 
     <Spinner
@@ -71,7 +55,7 @@
         android:id="@+id/quantity_int"
         android:layout_below="@+id/grocery_quantity"
         android:spinnerMode="dropdown"
-        android:layout_marginLeft="12dp"
+        android:layout_marginLeft="20dp"
         android:entries="@array/int_array"
         />
 
@@ -81,7 +65,7 @@
         android:id="@+id/quantity_type"
         android:layout_below="@+id/grocery_quantity"
         android:spinnerMode="dropdown"
-        android:layout_marginLeft="84dp"
+        android:layout_marginLeft="96dp"
         android:entries="@array/item_array"
         />
 
@@ -92,6 +76,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/quantity_type"
         android:textSize="24sp"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="8dp"
         />
 
     <EditText
@@ -100,17 +86,19 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/brand"
-        android:layout_marginLeft="12dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginRight="64dp"
         />
 
     <TextView
         android:id="@+id/expire_exhaust_date"
-        android:text="@string/expires"
+        android:text="Average Lifetime"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_below="@id/grocery_edit_brand"
         android:textSize="24sp"
+        android:layout_marginLeft="8dp"
         />
 
     <Spinner
@@ -119,7 +107,7 @@
         android:id="@+id/ttl_int"
         android:layout_below="@+id/expire_exhaust_date"
         android:spinnerMode="dropdown"
-        android:layout_marginLeft="12dp"
+        android:layout_marginLeft="20dp"
         android:entries="@array/int_array"
         />
 
@@ -129,7 +117,7 @@
         android:id="@+id/ttl_type"
         android:layout_below="@+id/expire_exhaust_date"
         android:spinnerMode="dropdown"
-        android:layout_marginLeft="84dp"
+        android:layout_marginLeft="96dp"
         android:entries="@array/date_array"
         />
 
@@ -139,7 +127,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ttl_type"
+        android:layout_marginTop="4dp"
         android:textSize="24sp"
+        android:layout_marginLeft="8dp"
         />
 
     <EditText
@@ -148,17 +138,30 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/category"
-        android:layout_marginLeft="12dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginRight="64dp"
         />
 
+    <TextView
+        android:id="@+id/bottom_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="-8dp"
+        android:layout_alignParentBottom="true"
+        android:background="#2a2a2a"
+        android:layout_marginBottom="-10dp"
+        />
 
     <Button
-        android:id="@+id/cancel_button"
-        android:text="@string/cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/add_button"
+        android:text="@string/button_add_grocery"
+        android:layout_width="150dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="0dp"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="6dp"
+        android:layout_centerHorizontal="true"
+        android:background="#d3d3d3"
         />
 
 

@@ -88,6 +88,7 @@ public class GroceryListApplication extends Application {
                                 }
                             });
                             GroceryList gl = new GroceryList(temp.getString("name"));
+                            gl.setCreator(temp.getString("created_by"));
                             currentGroceryLists.add(gl);
                         }
                     }

@@ -8,6 +8,8 @@ import android.location.Address;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +17,8 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.parse.ParseUser;
 
 import citris.stockup.R;
 import citris.stockup.groceries.Grocery;
@@ -45,9 +49,9 @@ public class AddGroceryActivity extends GroceryListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_grocery);
         setViews();
-        getActionBar().hide();
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Vollkorn-Regular.ttf");
-        addButton.setTypeface(tf);
+
+        getActionBar().setTitle("Add Grocery");
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void addGrocery() {
@@ -110,7 +114,6 @@ public class AddGroceryActivity extends GroceryListActivity {
         ttlTypeSpinner = (Spinner)findViewById(R.id.ttl_type);
         categoryEditText = (EditText)findViewById(R.id.edit_category);
         addButton = (Button)findViewById(R.id.add_button);
-        cancelButton = (Button)findViewById(R.id.cancel_button);
         barcodeButton = (ImageButton)findViewById(R.id.barcode);
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -120,12 +123,6 @@ public class AddGroceryActivity extends GroceryListActivity {
             }
         });
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancel();
-            }
-        });
 
         barcodeButton.setOnClickListener(new View.OnClickListener() {
 
@@ -151,5 +148,22 @@ public class AddGroceryActivity extends GroceryListActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_list_view, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                cancel();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

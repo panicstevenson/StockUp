@@ -19,6 +19,7 @@ public class GroceryLists extends LinearLayout {
     private Grocery grocery;
     private CheckedTextView checkbox;
     private TextView subtext;
+    private TextView textView;
 
     public GroceryLists(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -27,8 +28,8 @@ public class GroceryLists extends LinearLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        checkbox = (CheckedTextView)findViewById(android.R.id.text1);
-        //subtext = (TextView)findViewById(android.R.id.text2);
+        textView = (TextView)findViewById(android.R.id.text1);
+        subtext = (TextView)findViewById(android.R.id.text2);
     }
 
     public Grocery getGrocery() {
@@ -37,6 +38,7 @@ public class GroceryLists extends LinearLayout {
 
     public void setList(GroceryList list) {
         this.list = list;
-        checkbox.setText(list.getName());
+        textView.setText(list.getName());
+        subtext.setText("Created by " + list.getCreator());
     }
 }

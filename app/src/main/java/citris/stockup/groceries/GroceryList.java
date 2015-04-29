@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class GroceryList {
     private String name;
     private ArrayList<Grocery> contents;
+    private String creator;
 
     public GroceryList(String name){
         this.name = name;
@@ -29,6 +30,14 @@ public class GroceryList {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
     public ArrayList<Grocery> getContents() {
