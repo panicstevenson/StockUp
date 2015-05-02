@@ -6,13 +6,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.ParseUser;
 
@@ -23,7 +28,7 @@ import citris.stockup.groceries.Grocery;
 import citris.stockup.groceries.GroceryList;
 
 
-public class ViewListsActivity extends ListActivity {
+public class ViewListsActivity extends ListActivity implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private Button addButton;
     private GroceryListApplication app;
@@ -38,7 +43,14 @@ public class ViewListsActivity extends ListActivity {
         setContentView(R.layout.list_list_view);
         setViews();
 
-        getActionBar().hide();
+        //Search view initialization
+        searchView = (SearchView)findViewById(R.id.grocery_search);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(true);
+        searchView.setOnCloseListener(this);
+        searchView.setOnQueryTextListener(this);
+        searchView.setQueryHint("Search for a list...");
 
         app = (GroceryListApplication)getApplication();
         listAdapter = new ListListAdapter(app.getCurrentGroceryLists(), this);
@@ -49,18 +61,13 @@ public class ViewListsActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+
+        //Open selected list
         GroceryList gl = listAdapter.getItem(position);
         app.setCurrentGroceries(gl.getContents());
         Intent intent = new Intent(ViewListsActivity.this, ViewGroceriesActivity.class);
-        //adapter.toggleTaskCompleteAtPosition(position);
-
-
         intent.putExtra("listName", listAdapter.getItem(position).getName());
-        //intent.putExtra("position", position);
         startActivity(intent);
-        //app.viewGrocery(g);
-        //app.saveGrocery(g);
-
     }
 
     @Override
@@ -70,17 +77,30 @@ public class ViewListsActivity extends ListActivity {
     }
 
     private void setViews() {
-        textview = (TextView)findViewById(R.id.grocery_list);
-        textview.setText(ParseUser.getCurrentUser().getUsername() + "'s Lists");
+        getActionBar().setTitle(ParseUser.getCurrentUser().getUsername() + "'s Lists");
 
-        /*addButton.setOnClickListener(new View.OnClickListener() {
+        //On long click edit/remove grocery list
+        getListView().setLongClickable(true);
+        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
+                Intent intent = new Intent(ViewListsActivity.this, EditListActivity.class);
+                GroceryList gl = listAdapter.getItem(position);
+                intent.putExtra("tmpList", gl);
+                intent.putExtra("position", position);
+                startActivity(intent);
+                return true;
+            }
+        });
+
+        //add list
+        addButton = (Button)findViewById(R.id.add_button);
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Add grocerylist add button
-                //Intent intent = new Intent(ViewListsActivity.this, AddGroceryActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(ViewListsActivity.this, AddListActivity.class);
+                startActivity(intent);
             }
-        }); */
+        });
     }
 
     @Override
@@ -91,16 +111,34 @@ public class ViewListsActivity extends ListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        //Logout
+        switch (item.getItemId()) {
+            case R.id.logout:
+                app.logout();
+                app.getCurrentGroceries().clear();
+                app.getCurrentGroceryLists().clear();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    //Search functions
+    @Override
+    public boolean onClose() {
+        listAdapter.searchLists("");
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        listAdapter.searchLists(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        listAdapter.searchLists(newText);
+        return false;
     }
 }
