@@ -3,6 +3,8 @@
     style="@style/LoginFormContainer"
     android:orientation="vertical" >
 
+
+
     <EditText
         android:id="@+id/username"
         android:layout_width="match_parent"
@@ -22,12 +24,23 @@
         android:maxLines="1"
         android:singleLine="true" />
 
+
+    <Button
+        android:id="@+id/btn_ForgetPass"
+        android:background="@drawable/fb_large"
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content" />
+
     <Button
         android:id="@+id/btn_login"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
+
         android:text="@string/action_sign_in_short" />
 
 
@@ -48,11 +61,5 @@
         android:layout_marginTop="16dp"
         android:text="@string/action_register" />
 
-    <Button
-        android:id="@+id/btn_ForgetPass"
-        android:layout_width="287dp"
-        android:layout_marginLeft="30dp"
-        android:layout_height="wrap_content"
-        android:text="Forget Password" />
 
 </LinearLayout>

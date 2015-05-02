@@ -15,6 +15,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -46,6 +48,8 @@ public class SignUpActivity extends Activity implements OnClickListener{
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        getActionBar().setTitle("Sign Up");
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         // creating connection detector class instance
         cd = new ConnectionDetector(getApplicationContext());
@@ -78,9 +82,6 @@ public class SignUpActivity extends Activity implements OnClickListener{
                     showAlertDialog(getApplicationContext(), "No Internet Connection",
                             "You don't have internet connection.", false);
                 }
-                break;
-            case R.id.cancel_btn:
-                finish();
                 break;
             default:
                 break;
@@ -200,5 +201,23 @@ public class SignUpActivity extends Activity implements OnClickListener{
 
         // Showing Alert Message
         alertDialog.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_list_view, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //Clicking home takes you back to your lists
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

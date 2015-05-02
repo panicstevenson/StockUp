@@ -24,8 +24,10 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import citris.stockup.grocerylist.GroceryListApplication;
 import citris.stockup.grocerylist.ViewGroceriesActivity;
 import citris.stockup.grocerylist.ViewListsActivity;
+import citris.stockup.grocerylist.WaitSplash;
 
 public class LoginActivity extends Activity {
     Button btn_LoginIn = null;
@@ -33,6 +35,8 @@ public class LoginActivity extends Activity {
     Button btn_ForgetPass = null;
     private EditText mUserNameEditText;
     private EditText mPasswordEditText;
+    private GroceryListApplication app;
+
 
     // flag for Internet connection status
     Boolean isInternetPresent = false;
@@ -48,8 +52,6 @@ public class LoginActivity extends Activity {
 
         //Initializing Parse SDK
         onCreateParse();
-        //Calling ParseAnalytics to see Analytics of our app
-        ParseAnalytics.trackAppOpened(getIntent());
 
         // creating connection detector class instance
         cd = new ConnectionDetector(getApplicationContext());
@@ -109,20 +111,23 @@ public class LoginActivity extends Activity {
 
     public void onCreateParse() {
         Parse.initialize(this, "0BqEQPyE7ycnXnarj1YgsGkvgzAlj8tJtkogFQL3", "388Timb3JFccZseI0M0pj92egGqd5DBaHpLr9qVV");
+
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        //getMenuInflater().inflate(R.menu.activity_login, menu);
-        return true;
+        getMenuInflater().inflate(R.menu.menu_list_view, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
+        //Clicking home takes you back to your lists
         switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -192,7 +197,10 @@ public class LoginActivity extends Activity {
 
     protected void loginSuccessful() {
         // TODO Auto-generated method stub
-        Intent in =  new Intent(LoginActivity.this, ViewListsActivity.class);
+        Intent in =  new Intent(LoginActivity.this, WaitSplash.class);
+        app = (GroceryListApplication)getApplication();
+        app.updateData();
+        app.inflateLists();
         startActivity(in);
     }
     protected void loginUnSuccessful() {

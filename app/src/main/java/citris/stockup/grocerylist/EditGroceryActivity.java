@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,9 +28,6 @@ public class EditGroceryActivity extends AddGroceryActivity {
     private EditText brandEditText;
     private EditText categoryEditText;
     private Button editButton;
-    private Button cancelButton;
-    protected boolean changesPending;
-    private AlertDialog unsavedChangesDialog;
     private Spinner quantityIntSpinner;
     private Spinner ttlIntSpinner;
     private Spinner quantityTypeSpinner;
@@ -42,7 +41,7 @@ public class EditGroceryActivity extends AddGroceryActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_grocery);
         setViews();
-        getActionBar().hide();
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void editGrocery(int pos) {
@@ -62,36 +61,6 @@ public class EditGroceryActivity extends AddGroceryActivity {
         }
     }
 
-    private void cancel(final int pos) {
-        if (changesPending){
-            unsavedChangesDialog = new AlertDialog.Builder(this)
-                    .setTitle(R.string.unsaved_changes_title)
-                    .setMessage(R.string.unsaved_changes_message)
-//          Add
-                    .setNegativeButton(R.string.button_add, new AlertDialog.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            editGrocery(pos);
-                        }
-                    })
-//          Cancel
-                    .setPositiveButton(R.string.button_cancel, new AlertDialog.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            unsavedChangesDialog.cancel();
-                        }
-                    })
-//          Discard
-                    .setNeutralButton(R.string.button_discard, new AlertDialog.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    })
-                    .create();
-            unsavedChangesDialog.show();
-        } else {
-            finish();
-        }
-    }
-
     private void setViews() {
         final Grocery g = getIntent().getParcelableExtra("tmpGrocery");
         idHolder = g.getId();
@@ -106,7 +75,6 @@ public class EditGroceryActivity extends AddGroceryActivity {
         ttlTypeSpinner = (Spinner)findViewById(R.id.ttl_type);
         categoryEditText = (EditText)findViewById(R.id.edit_category);
         editButton = (Button)findViewById(R.id.edit_button);
-        cancelButton = (Button)findViewById(R.id.cancel_button);
 
         groceryNameEditText.setText(g.getName());
         quantityIntSpinner.setSelection(g.getQuantityInt() - 1);
@@ -116,6 +84,7 @@ public class EditGroceryActivity extends AddGroceryActivity {
         ttlTypeSpinner.setSelection(g.getTtlTypePos());
         categoryEditText.setText(g.getCategory());
 
+        getActionBar().setTitle("Edit " + g.getName());
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,27 +92,23 @@ public class EditGroceryActivity extends AddGroceryActivity {
                 editGrocery(pos);
             }
         });
+    }
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancel(pos);
-            }
-        });
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_list_view, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-        groceryNameEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                changesPending = true;
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //Clicking home takes you back to your lists
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

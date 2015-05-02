@@ -23,8 +23,6 @@ public class ItemDetailActivity extends GroceryListActivity {
     private TextView groceryTtlType;
     private TextView groceryCategory;
     private Button editButton;
-    private Button backButton;
-    private TextView groceryId;
     private Button removeButton;
 
     @Override
@@ -44,12 +42,12 @@ public class ItemDetailActivity extends GroceryListActivity {
         groceryTtlType = (TextView) findViewById(R.id.insert_ttl_type);
         groceryCategory = (TextView) findViewById(R.id.insert_category);
         editButton = (Button) findViewById(R.id.edit_button);
-        backButton = (Button) findViewById(R.id.back_button);
         removeButton = (Button) findViewById(R.id.remove_button);
-        groceryId = (TextView) findViewById(R.id.insert_id);
 
         final Grocery g = getIntent().getParcelableExtra("tmpGrocery");
         final int pos = getIntent().getIntExtra("position", 0);
+
+        getActionBar().setTitle(g.getName() + " Details");
 
         groceryName.setText(g.getName());
         groceryQuantityInt.setText("" + g.getQuantityInt());
@@ -58,7 +56,6 @@ public class ItemDetailActivity extends GroceryListActivity {
         groceryTtlInt.setText("" + g.getTtlInt());
         groceryTtlType.setText(g.getTtlType());
         groceryCategory.setText(g.getCategory());
-        groceryId.setText(g.getId());
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,13 +64,6 @@ public class ItemDetailActivity extends GroceryListActivity {
                 intent.putExtra("tmpGrocery", g);
                 intent.putExtra("position", pos);
                 startActivity(intent);
-                finish();
-            }
-        });
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 finish();
             }
         });

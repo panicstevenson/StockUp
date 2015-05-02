@@ -4,7 +4,6 @@ import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,28 +12,18 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.TextView;
-import static citris.stockup.groceries.GroceriesSQLiteOpenHelper.*;
-
-
-import com.parse.Parse;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
-
 import citris.stockup.R;
 import citris.stockup.adapters.GroceryListAdapter;
-import citris.stockup.adapters.ListListAdapter;
 import citris.stockup.groceries.Grocery;
 
 
 public class ViewGroceriesActivity extends ListActivity implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
-    private Button addButton;
     private GroceryListApplication app;
     private GroceryListAdapter adapter;
+    private Button addButton;
     private Button checkoutButton;
     private SearchView searchView;
-    private TextView textview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +33,7 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //Search view initialization
         searchView = (SearchView)findViewById(R.id.grocery_search);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -52,6 +42,7 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
         searchView.setOnQueryTextListener(this);
         searchView.setQueryHint("Search grocery list...");
 
+        //list adapter initialization
         app = (GroceryListApplication)getApplication();
         adapter = new GroceryListAdapter(app.getCurrentGroceries(), this);
         setListAdapter(adapter);
@@ -59,46 +50,41 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
+        //Clicking on an item causes it to get checked off
+        //TODO change to right swipe
         super.onListItemClick(l, v, position, id);
-        Intent intent = new Intent(ViewGroceriesActivity.this, ItemDetailActivity.class);
-        //adapter.toggleTaskCompleteAtPosition(position);
-        Grocery g = adapter.getItem(position);
-
-        intent.putExtra("tmpGrocery", g);
-        intent.putExtra("position", position);
-        startActivity(intent);
-        //app.viewGrocery(g);
-        //app.saveGrocery(g);
+        adapter.toggleTaskCompleteAtPosition(position);
+        app.saveGrocery(position);
     }
-
-
 
     @Override
     protected void onResume() {
+        //TODO reorder the list of current groceries
         super.onResume();
         adapter.forceReload();
     }
 
     private void setViews() {
+        //Set actionbar title to the name of the current list
+        final String listName = getIntent().getStringExtra("listName");
+        getActionBar().setTitle(listName);
+
+        //Long Click sends you to item detail activity
+        //Creates parcelable grocery and sends it to the next activity
         getListView().setLongClickable(true);
         getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
-                adapter.toggleTaskCompleteAtPosition(position);
+                Intent intent = new Intent(ViewGroceriesActivity.this, ItemDetailActivity.class);
+                Grocery g = adapter.getItem(position);
+                intent.putExtra("tmpGrocery", g);
+                intent.putExtra("position", position);
+                startActivity(intent);
                 return true;
             }
         });
 
-
-
-
-        final String listName = getIntent().getStringExtra("listName");
+        //Add button creates a new grocery under the current list
         addButton = (Button)findViewById(R.id.add_grocery);
-        checkoutButton = (Button)findViewById(R.id.checkout);
-        //textview = (TextView)findViewById(R.id.grocery_list);
-        //textview.setText(listName);
-
-        getActionBar().setTitle(listName);
-
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +93,9 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
                 startActivity(intent);
             }
         });
+
+        //Checkout button resets current TTL to set TTL then finishes
+        checkoutButton = (Button)findViewById(R.id.checkout);
         checkoutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 app.checkout();
@@ -123,6 +112,7 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //Clicking home takes you back to your lists
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
@@ -132,6 +122,7 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
         }
     }
 
+    //Search functions
     @Override
     public boolean onClose() {
         adapter.searchGroceries("");

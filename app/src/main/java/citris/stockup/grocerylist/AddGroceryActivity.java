@@ -23,6 +23,7 @@ import com.parse.ParseUser;
 import citris.stockup.R;
 import citris.stockup.groceries.Grocery;
 import citris.stockup.scanner.CameraActivity;
+import citris.stockup.scanner.zxing.ScannerFragmentActivity;
 
 /**
  * Created by Panic on 4/6/2015.
@@ -129,7 +130,7 @@ public class AddGroceryActivity extends GroceryListActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Intent in = new Intent(AddGroceryActivity.this, CameraActivity.class);
+                Intent in = new Intent(AddGroceryActivity.this, ScannerFragmentActivity.class);
                 startActivity(in);
             }
         });

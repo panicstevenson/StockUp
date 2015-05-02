@@ -54,6 +54,18 @@
             android:label="@string/button_add_grocery" >
         </activity>
         <activity
+            android:name=".grocerylist.AddListActivity"
+            android:label="Add List" >
+        </activity>
+        <activity
+            android:name=".grocerylist.EditListActivity"
+            android:label="Edit List" >
+        </activity>
+        <activity
+            android:name=".grocerylist.WaitSplash"
+            android:label="Wait Splash" >
+        </activity>
+        <activity
             android:name=".ForgotPasswordActivity"
             android:label="@string/title_activity_forgot_password" >
         </activity>

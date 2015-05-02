@@ -5,7 +5,7 @@
     tools:context=".ListView">
 
     <Button
-        android:id="@+id/add_grocery"
+        android:id="@+id/add_button"
         android:text="Add List"
         android:layout_width="fill_parent"
         android:layout_marginLeft="-175dp"
@@ -36,7 +36,7 @@
         android:layout_marginTop="-4dp"
         android:layout_marginRight="-2dp"
         android:layout_marginLeft="-2dp"
-        android:layout_below="@id/add_grocery"
+        android:layout_below="@id/add_button"
         />
 
     <ListView

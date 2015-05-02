@@ -20,12 +20,14 @@ import citris.stockup.views.GroceryLists;
 public class ListListAdapter extends BaseAdapter{
 
     private ArrayList<GroceryList> list = new ArrayList<GroceryList>();
+    private ArrayList<GroceryList> storedlist = new ArrayList<GroceryList>();
     private Context context;
 
     public ListListAdapter(ArrayList<GroceryList> list, Context context) {
         super();
         this.list = list;
         this.context = context;
+        this.storedlist.addAll(list);
     }
 
     @Override
@@ -58,13 +60,24 @@ public class ListListAdapter extends BaseAdapter{
         return gl;
     }
 
-    public void openList(int position) {
-        //
+    public void forceReload() {
+        storedlist.clear();
+        this.storedlist.addAll(list);
+        notifyDataSetChanged();
     }
 
-    public void forceReload() {
-        /*storedGroceries.clear();
-        this.storedGroceries.addAll(groceries);
-        notifyDataSetChanged();*/
+    public void searchLists(String query){
+        query = query.toLowerCase();
+        list.clear();
+        if (query.isEmpty()) {
+            list.addAll(storedlist);
+        } else {
+            for (GroceryList gl : storedlist) {
+                if (gl.getName().toLowerCase().contains(query)) {
+                    list.add(gl);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 }

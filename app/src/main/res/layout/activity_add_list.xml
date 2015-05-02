@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:layout_marginTop="24dp"
+        android:id="@+id/list_name"
+        android:text="List Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:layout_marginLeft="8dp"
+        />
+
+    <EditText
+        android:id="@+id/insert_list_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_name"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="12dp"
+        />
+
+    <TextView
+        android:id="@+id/list_creator"
+        android:text="List Creator"
+        android:layout_marginTop="12dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/insert_list_name"
+        android:textSize="24sp"
+        android:layout_marginLeft="8dp"
+        />
+
+    <TextView
+        android:id="@+id/insert_list_creator"
+        android:text="Insert Creator"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_creator"
+        android:textSize="20sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp"
+        />
+
+    <TextView
+        android:id="@+id/list_share"
+        android:text="Share With"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/insert_list_creator"
+        android:textSize="24sp"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="8dp"
+        />
+
+    <EditText
+        android:id="@+id/insert_share"
+        android:hint="user1, user2, ..."
+        android:layout_width="232dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_share"
+        android:layout_marginLeft="20dp"
+        />
+
+    <TextView
+        android:id="@+id/bottom_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="-8dp"
+        android:layout_alignParentBottom="true"
+        android:background="#2a2a2a"
+        android:layout_marginBottom="-10dp"
+        />
+
+    <Button
+        android:id="@+id/add_button"
+        android:text="Add List"
+        android:layout_width="150dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="6dp"
+        android:layout_centerHorizontal="true"
+        android:background="#d3d3d3"
+        />
+
+
+</RelativeLayout>
