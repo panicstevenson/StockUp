@@ -117,6 +117,8 @@ public class ViewListsActivity extends ListActivity implements SearchView.OnQuer
                 app.logout();
                 app.getCurrentGroceries().clear();
                 app.getCurrentGroceryLists().clear();
+                //listAdapter.notifyDataSetChanged();
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
