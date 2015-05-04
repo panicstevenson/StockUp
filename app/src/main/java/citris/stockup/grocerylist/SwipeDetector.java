@@ -17,7 +17,8 @@ public class SwipeDetector implements View.OnTouchListener {
     }
 
     private static final String logTag = "SwipeDetector";
-    private static final int MIN_DISTANCE = 10;
+    private static final int HORIZONTAL_MIN_DISTANCE = 230;
+    private static final int VERTICAL_MIN_DISTANCE = 600;
     private float downX, downY, upX, upY;
     private Action mSwipeDetected = Action.None;
 
@@ -29,15 +30,15 @@ public class SwipeDetector implements View.OnTouchListener {
         return mSwipeDetected;
     }
 
+    @Override
     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN: {
+            case MotionEvent.ACTION_DOWN:
                 downX = event.getX();
                 downY = event.getY();
                 mSwipeDetected = Action.None;
                 return false; // allow other events like Click to be processed
-            }
-            case MotionEvent.ACTION_MOVE: {
+            case MotionEvent.ACTION_UP:
                 upX = event.getX();
                 upY = event.getY();
 
@@ -45,36 +46,33 @@ public class SwipeDetector implements View.OnTouchListener {
                 float deltaY = downY - upY;
 
                 // horizontal swipe detection
-                if (Math.abs(deltaX) > MIN_DISTANCE) {
+                if (Math.abs(deltaX) > HORIZONTAL_MIN_DISTANCE) {
                     // left or right
                     if (deltaX < 0) {
-                        Log.d("Swipe", "Swipe Left to Right");
+                        Log.i(logTag, "Swipe Left to Right");
                         mSwipeDetected = Action.LR;
-                        return true;
+                        return false;
                     }
                     if (deltaX > 0) {
-                        Log.d("Swipe", "Swipe Right to Left");
+                        Log.i(logTag, "Swipe Right to Left");
                         mSwipeDetected = Action.RL;
-                        return true;
+                        return false;
                     }
-                } else
-
-                    // vertical swipe detection
-                    if (Math.abs(deltaY) > MIN_DISTANCE) {
-                        // top or down
-                        if (deltaY < 0) {
-                            Log.d("Swipe", "Swipe Top to Bottom");
-                            mSwipeDetected = Action.TB;
-                            return false;
-                        }
-                        if (deltaY > 0) {
-                            Log.d("Swipe", "Swipe Bottom to Top");
-                            mSwipeDetected = Action.BT;
-                            return false;
-                        }
+                } else if (Math.abs(deltaY) > VERTICAL_MIN_DISTANCE) { // vertical swipe
+                    // detection
+                    // top or down
+                    if (deltaY < 0) {
+                        Log.i(logTag, "Swipe Top to Bottom");
+                        mSwipeDetected = Action.TB;
+                        return false;
                     }
-                return true;
-            }
+                    if (deltaY > 0) {
+                        Log.i(logTag, "Swipe Bottom to Top");
+                        mSwipeDetected = Action.BT;
+                        return false;
+                    }
+                }
+                return false;
         }
         return false;
     }

@@ -14,6 +14,7 @@ public class GroceryList implements Parcelable {
     private String creator;
     private String key;
     private String id;
+    private boolean delete = false;
 
     public GroceryList(String name){
         this.name = name;
@@ -107,5 +108,13 @@ public class GroceryList implements Parcelable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean getDelete() {
+        return delete;
+    }
+
+    public void setDelete(boolean delete) {
+        this.delete = delete;
     }
 }

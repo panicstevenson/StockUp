@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import citris.stockup.R;
 import citris.stockup.groceries.Grocery;
 import citris.stockup.groceries.GroceryList;
+import citris.stockup.grocerylist.GroceryListApplication;
 import citris.stockup.views.GroceryListItem;
 import citris.stockup.views.GroceryLists;
 
@@ -19,6 +20,7 @@ import citris.stockup.views.GroceryLists;
 
 public class ListListAdapter extends BaseAdapter{
 
+    private GroceryListApplication app;
     private ArrayList<GroceryList> list = new ArrayList<GroceryList>();
     private ArrayList<GroceryList> storedlist = new ArrayList<GroceryList>();
     private Context context;
@@ -79,5 +81,9 @@ public class ListListAdapter extends BaseAdapter{
             }
         }
         notifyDataSetChanged();
+    }
+
+    public void remove(GroceryList item) {
+        list.remove(item);
     }
 }
