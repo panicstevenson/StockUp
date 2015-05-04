@@ -14,7 +14,7 @@ import citris.stockup.R;
 public class WaitSplash extends Activity {
 
     // Splash screen timer
-    private static int SPLASH_TIME_OUT = 4000;
+    private static int SPLASH_TIME_OUT = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
