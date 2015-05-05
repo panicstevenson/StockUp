@@ -159,6 +159,12 @@ public class ViewListsActivity extends ListActivity implements SearchView.OnQuer
                                 app.getCurrentGroceryLists().get(position).setDelete(false);
                                 break;
                             } else {
+                                if (!app.getCurrentGroceries().get(position).isComplete()) {
+                                    YoYo.with(Techniques.BounceInRight)
+                                            .duration(700)
+                                            .playOn(view.findViewById(R.id.check));
+                                    view.findViewById(R.id.check).setVisibility(View.VISIBLE);
+                                }
                                 break;
                             }
                             /*if(!app.getCurrentGroceries().get(position).getDelete()) {
