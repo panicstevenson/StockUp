@@ -21,6 +21,7 @@ public class Grocery implements Parcelable {
 
     private boolean complete;
     private String id;
+    private boolean delete;
 
     public Grocery(String groceryName) {
         name = groceryName;
@@ -228,5 +229,13 @@ public class Grocery implements Parcelable {
 
     public int getTtlTypePos() {
         return ttlType;
+    }
+
+    public boolean getDelete() {
+        return delete;
+    }
+
+    public void setDelete(boolean delete) {
+        this.delete = delete;
     }
 }

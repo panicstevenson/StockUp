@@ -16,6 +16,33 @@
         android:background="@color/material_blue_grey_800"
         />
 
+    <TextView
+        android:id="@+id/check"
+        android:text="✓"
+        android:gravity="center"
+        android:textSize="42dp"
+        android:textColor="@android:color/white"
+        android:layout_width="60dp"
+        android:layout_height="fill_parent"
+        android:background="@android:color/holo_green_light"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="-12dp"
+        android:visibility="invisible"
+        />
+
+    <TextView
+        android:id="@+id/delete_button"
+        android:layout_width="120dp"
+        android:text="Delete?"
+        android:textColor="@android:color/white"
+        android:layout_height="fill_parent"
+        android:background="@color/viewfinder_laser"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:textSize="18dp"
+        android:visibility="invisible"
+        />
+
     <CheckedTextView
         android:id="@android:id/text1"
         android:text="test me"
@@ -24,7 +51,6 @@
         android:gravity="center_vertical"
         android:textSize="22sp"
         android:layout_toRightOf="@id/bar"
-        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
         android:checkMarkTint="#ff0e8022"
         android:layout_marginLeft="8dp"
         android:layout_marginBottom="-6dp"

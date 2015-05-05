@@ -12,9 +12,18 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 import citris.stockup.R;
 import citris.stockup.adapters.GroceryListAdapter;
 import citris.stockup.groceries.Grocery;
+import citris.stockup.groceries.GroceryList;
 
 
 public class ViewGroceriesActivity extends ListActivity implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
@@ -24,6 +33,8 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
     private Button addButton;
     private Button checkoutButton;
     private SearchView searchView;
+    private Timer mTimer;
+    private TextView test;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +60,6 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
     }
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        //Clicking on an item causes it to get checked off
-        //TODO change to right swipe
-        super.onListItemClick(l, v, position, id);
-        adapter.toggleTaskCompleteAtPosition(position);
-        app.saveGrocery(position);
-    }
-
-    @Override
     protected void onResume() {
         //TODO reorder the list of current groceries
         super.onResume();
@@ -68,6 +70,136 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
         //Set actionbar title to the name of the current list
         final String listName = getIntent().getStringExtra("listName");
         getActionBar().setTitle(listName);
+
+        final SwipeDetector swipeDetector = new SwipeDetector();
+        getListView().setOnTouchListener(swipeDetector);
+
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                test = (TextView) view.findViewById(R.id.delete_button);
+                final View finalView = view;
+
+                test.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        YoYo.with(Techniques.FadeOutLeft)
+                                .duration(650)
+                                .playOn(finalView);
+                        mTimer = new Timer();
+                        mTimer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                boolean tmp = false;
+                                if (position > 0) {
+                                    tmp = app.getCurrentGroceries().get(position - 1).getDelete();
+                                }
+                                final boolean finalTmp = tmp;
+                                app.removeGrocery(position);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        adapter.notifyDataSetChanged();
+                                        app.getCurrentGroceries().get(position - 1).setDelete(finalTmp);
+                                        if (finalTmp) {
+                                            finalView.findViewById(R.id.delete_button)
+                                                    .setVisibility(View.VISIBLE);
+                                        } else {
+                                            finalView.findViewById(R.id.delete_button)
+                                                    .setVisibility(View.INVISIBLE);
+                                        }
+                                        finalView.findViewById(R.id.delete_button).setClickable(finalTmp);
+                                        finalView.setTranslationX(0);
+                                    }
+                                });
+                                mTimer = null;
+                            }
+                        }, 700);
+                        YoYo.with(Techniques.FadeIn)
+                                .duration(1)
+                                .delay(651)
+                                .playOn(finalView);
+                    }
+                });
+
+                test.setClickable(false);
+
+
+                if (swipeDetector.swipeDetected()) {
+                    switch (swipeDetector.getAction()) {
+                        case RL:
+                            if (!app.getCurrentGroceries().get(position).isComplete()) {
+                                if (!app.getCurrentGroceries().get(position).getDelete()) {
+                                    YoYo.with(Techniques.BounceInRight)
+                                            .duration(700)
+                                            .playOn(view.findViewById(R.id.delete_button));
+                                    view.findViewById(R.id.delete_button).setVisibility(View.VISIBLE);
+                                    view.findViewById(R.id.delete_button).setClickable(true);
+                                    app.getCurrentGroceries().get(position).setDelete(true);
+                                    break;
+                                }
+                            } else {
+                                YoYo.with(Techniques.SlideOutRight)
+                                        .duration(350)
+                                        .playOn(view.findViewById(R.id.check));
+                                app.getCurrentGroceries().get(position).toggleComplete();
+                                app.saveGrocery(position);
+                                break;
+                            }
+                        case LR:
+                            if (app.getCurrentGroceries().get(position).getDelete()) {
+                                YoYo.with(Techniques.SlideOutRight)
+                                        .duration(350)
+                                        .playOn(view.findViewById(R.id.delete_button));
+                                view.findViewById(R.id.delete_button).setClickable(false);
+                                app.getCurrentGroceries().get(position).setDelete(false);
+                                break;
+                            } else {
+                                if (!app.getCurrentGroceries().get(position).isComplete()) {
+                                    YoYo.with(Techniques.BounceInRight)
+                                            .duration(700)
+                                            .playOn(view.findViewById(R.id.check));
+                                    view.findViewById(R.id.check).setVisibility(View.VISIBLE);
+                                    app.getCurrentGroceries().get(position).toggleComplete();
+                                    app.saveGrocery(position);
+                                    break;
+                                } else {
+                                    YoYo.with(Techniques.SlideOutRight)
+                                            .duration(350)
+                                            .playOn(view.findViewById(R.id.check));
+                                    app.getCurrentGroceries().get(position).toggleComplete();
+                                    app.saveGrocery(position);
+                                    break;
+                                }
+                            }
+                    }
+                } else {
+                    if (app.getCurrentGroceries().get(position).getDelete()) {
+                        YoYo.with(Techniques.SlideOutRight)
+                                .duration(350)
+                                .playOn(view.findViewById(R.id.delete_button));
+                        view.findViewById(R.id.delete_button).setClickable(false);
+                        app.getCurrentGroceries().get(position).setDelete(false);
+                        app.saveGrocery(position);
+                    } else {
+                        if (!app.getCurrentGroceries().get(position).isComplete()) {
+                            YoYo.with(Techniques.BounceInRight)
+                                    .duration(700)
+                                    .playOn(view.findViewById(R.id.check));
+                            view.findViewById(R.id.check).setVisibility(View.VISIBLE);
+                            app.getCurrentGroceries().get(position).toggleComplete();
+                            app.saveGrocery(position);
+                        } else {
+                            YoYo.with(Techniques.SlideOutRight)
+                                    .duration(350)
+                                    .playOn(view.findViewById(R.id.check));
+                            app.getCurrentGroceries().get(position).toggleComplete();
+                            app.saveGrocery(position);
+                        }
+                    }
+                }
+            }
+        });
 
         //Long Click sends you to item detail activity
         //Creates parcelable grocery and sends it to the next activity

@@ -159,12 +159,11 @@ public class ViewListsActivity extends ListActivity implements SearchView.OnQuer
                                 app.getCurrentGroceryLists().get(position).setDelete(false);
                                 break;
                             } else {
-                                if (!app.getCurrentGroceries().get(position).isComplete()) {
-                                    YoYo.with(Techniques.BounceInRight)
-                                            .duration(700)
-                                            .playOn(view.findViewById(R.id.check));
-                                    view.findViewById(R.id.check).setVisibility(View.VISIBLE);
-                                }
+                                GroceryList gl = listAdapter.getItem(position);
+                                app.setCurrentGroceries(gl.getContents());
+                                Intent intent = new Intent(ViewListsActivity.this, ViewGroceriesActivity.class);
+                                intent.putExtra("listName", listAdapter.getItem(position).getName());
+                                startActivity(intent);
                                 break;
                             }
                             /*if(!app.getCurrentGroceries().get(position).getDelete()) {
@@ -178,12 +177,20 @@ public class ViewListsActivity extends ListActivity implements SearchView.OnQuer
                             } */
                     }
                 } else {
-                    //Open selected list
-                    GroceryList gl = listAdapter.getItem(position);
-                    app.setCurrentGroceries(gl.getContents());
-                    Intent intent = new Intent(ViewListsActivity.this, ViewGroceriesActivity.class);
-                    intent.putExtra("listName", listAdapter.getItem(position).getName());
-                    startActivity(intent);
+                    if(app.getCurrentGroceryLists().get(position).getDelete()) {
+                        YoYo.with(Techniques.SlideOutRight)
+                                .duration(350)
+                                .playOn(view.findViewById(R.id.delete_button));
+                        view.findViewById(R.id.delete_button).setClickable(false);
+                        app.getCurrentGroceryLists().get(position).setDelete(false);
+                    } else {
+                        //Open selected list
+                        GroceryList gl = listAdapter.getItem(position);
+                        app.setCurrentGroceries(gl.getContents());
+                        Intent intent = new Intent(ViewListsActivity.this, ViewGroceriesActivity.class);
+                        intent.putExtra("listName", listAdapter.getItem(position).getName());
+                        startActivity(intent);
+                    }
                 }
             }
         });

@@ -24,6 +24,7 @@ public class GroceryListItem extends LinearLayout {
     private TextView subtext;
     private TextView color;
     private android.graphics.Typeface tf;
+    private TextView check;
 
     public GroceryListItem(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -36,6 +37,7 @@ public class GroceryListItem extends LinearLayout {
         checkbox = (CheckedTextView)findViewById(android.R.id.text1);
         subtext = (TextView)findViewById(android.R.id.text2);
         color = (TextView) findViewById(R.id.bar);
+        check = (TextView) findViewById(R.id.check);
     }
 
     public Grocery getGrocery() {
@@ -53,7 +55,10 @@ public class GroceryListItem extends LinearLayout {
         }
         //checkbox.setTypeface(tf);
         checkbox.setText(grocery.getName());
-        checkbox.setChecked(grocery.isComplete());
+        check.setVisibility(View.INVISIBLE);
+        if(grocery.isComplete()) {
+            check.setVisibility(View.VISIBLE);
+        }
         subtext.setText("" + grocery.getBrand() + " - " + grocery.getQuantityInt() + " " + grocery.getQuantityType());
     }
 }
