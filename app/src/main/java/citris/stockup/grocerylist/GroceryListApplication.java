@@ -258,7 +258,7 @@ public class GroceryListApplication extends Application {
         for(int i = 0; i < currentGroceries.size(); i++) {
             removeGrocery(i);
         }
-        currentGroceryLists.remove(position);
+        //currentGroceryLists.remove(position);
     }
 
     public void checkout() {

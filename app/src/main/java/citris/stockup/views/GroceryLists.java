@@ -2,10 +2,12 @@ package citris.stockup.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import citris.stockup.R;
 import citris.stockup.groceries.Grocery;
 import citris.stockup.groceries.GroceryList;
 
@@ -20,6 +22,7 @@ public class GroceryLists extends LinearLayout {
     private CheckedTextView checkbox;
     private TextView subtext;
     private TextView textView;
+    private TextView delete;
 
     public GroceryLists(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -30,6 +33,7 @@ public class GroceryLists extends LinearLayout {
         super.onFinishInflate();
         textView = (TextView)findViewById(android.R.id.text1);
         subtext = (TextView)findViewById(android.R.id.text2);
+        delete = (TextView)findViewById(R.id.delete_button);
     }
 
     public Grocery getGrocery() {
@@ -40,5 +44,9 @@ public class GroceryLists extends LinearLayout {
         this.list = list;
         textView.setText(list.getName());
         subtext.setText("Created by " + list.getCreator());
+        delete.setVisibility(View.INVISIBLE);
+        if(list.getDelete()) {
+            delete.setVisibility(View.VISIBLE);
+        }
     }
 }

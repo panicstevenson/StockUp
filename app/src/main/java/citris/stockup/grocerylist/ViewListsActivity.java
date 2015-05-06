@@ -93,41 +93,37 @@ public class ViewListsActivity extends ListActivity implements SearchView.OnQuer
                 test.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //Animate off the screen
                         YoYo.with(Techniques.FadeOutLeft)
                                 .duration(650)
                                 .playOn(finalView);
                         mTimer = new Timer();
+
+                        //Wait for animation to complete to delete
                         mTimer.schedule(new TimerTask() {
                             @Override
                             public void run() {
-                                boolean tmp = false;
+                                /*boolean tmp = false;
                                 if (position > 0) {
                                     tmp = app.getCurrentGroceryLists().get(position - 1).getDelete();
                                 }
-                                final boolean finalTmp = tmp;
+                                final boolean finalTmp = tmp;*/
                                 app.removeList(position);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        listAdapter.notifyDataSetChanged();
-                                        app.getCurrentGroceryLists().get(position - 1).setDelete(finalTmp);
-                                        if(finalTmp) {
-                                            finalView.findViewById(R.id.delete_button)
-                                                    .setVisibility(View.VISIBLE);
-                                        } else {
-                                            finalView.findViewById(R.id.delete_button)
-                                                    .setVisibility(View.INVISIBLE);
-                                        }
-                                        finalView.findViewById(R.id.delete_button).setClickable(finalTmp);
+                                        //Can only alter adapter from runOnUiThread
+                                        listAdapter.remove(position);
                                         finalView.setTranslationX(0);
                                     }
                                 });
                                 mTimer = null;
                             }
                         }, 700);
+                        //View will remain invisible, bring it back with a YoYo animation
                         YoYo.with(Techniques.FadeIn)
                                 .duration(1)
-                                .delay(651)
+                                .delay(650)
                                 .playOn(finalView);
                     }
                 });

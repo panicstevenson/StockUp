@@ -83,7 +83,8 @@ public class ListListAdapter extends BaseAdapter{
         notifyDataSetChanged();
     }
 
-    public void remove(GroceryList item) {
-        list.remove(item);
+    public void remove(int position) {
+        list.remove(position);
+        notifyDataSetChanged();
     }
 }
