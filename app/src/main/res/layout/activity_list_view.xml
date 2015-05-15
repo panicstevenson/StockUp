@@ -1,7 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingTop="8dp"
     tools:context=".ListView">
 
     <Button
@@ -10,6 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_marginLeft="-145dp"
         android:layout_marginRight="-5dp"
+        android:layout_marginTop="8dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="@drawable/textlines"
@@ -20,9 +20,8 @@
         android:id="@+id/plus"
         android:text="+"
         android:layout_alignParentTop="true"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginTop="-10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
         android:textColor="#b2b2b2"
         android:textSize="48dp"
@@ -91,6 +90,24 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:background="#d3d3d3"
+        />
+
+    <TextView
+        android:id="@+id/suggest_opacity"
+        android:layout_width="fill_parent"
+        android:layout_height="470dp"
+        android:background="#DC000000"
+        android:visibility="invisible"
+        />
+
+    <ImageButton
+        android:id="@+id/suggest_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/carbonara"
+        android:visibility="invisible"
+        android:clickable="false"
         />
 
 

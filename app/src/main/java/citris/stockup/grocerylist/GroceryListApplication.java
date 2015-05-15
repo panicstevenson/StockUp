@@ -75,6 +75,7 @@ public class GroceryListApplication extends Application {
                                             for (int i = 0; i < groceries.size(); i++) {
                                                 ParseObject p = groceries.get(i);
                                                 Grocery g = new Grocery(p.getString(GROCERY_NAME), p.getInt(GROCERY_QUANTITY_INT), p.getInt(GROCERY_QUANTITY_TYPE), p.getString(GROCERY_BRAND), p.getInt(GROCERY_PAST_TTL), p.getInt(GROCERY_PAST_TTL_TYPE), p.getString(GROCERY_CATEGORY));
+                                                g.setComplete(p.getBoolean(GROCERY_COMPLETE));
                                                 g.setId(p.getObjectId());
                                                 g.setList(p.getString("tableid"));
                                                 currentGroceries.add(g);
@@ -213,7 +214,7 @@ public class GroceryListApplication extends Application {
             public void done(ParseObject groceryItem, ParseException e) {
                 if (e == null) {
                     groceryItem.put(GROCERY_NAME, g.getName());
-                    groceryItem.put(GROCERY_COMPLETE, Boolean.toString(g.isComplete()));
+                    groceryItem.put(GROCERY_COMPLETE, g.isComplete());
                     groceryItem.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException err) {
@@ -241,7 +242,7 @@ public class GroceryListApplication extends Application {
                 groceryItem.deleteInBackground();
             }
         });
-        currentGroceries.remove(position);
+        //currentGroceries.remove(position);
     }
 
     public void removeList (int position) {
@@ -274,9 +275,11 @@ public class GroceryListApplication extends Application {
                         groceryItem.increment(GROCERY_TTL, g.getTTL());
                         groceryItem.put(GROCERY_PAST_TTL, g.getTtlInt());
                         groceryItem.put(GROCERY_PAST_TTL_TYPE, g.getTtlType());
+                        groceryItem.put(GROCERY_COMPLETE, false);
                         groceryItem.saveInBackground();
                     }
                 });
+                g.setComplete(false);
             }
         }
     }

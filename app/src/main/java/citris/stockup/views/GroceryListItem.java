@@ -8,6 +8,9 @@ import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
 import citris.stockup.grocerylist.ViewGroceriesActivity.*;
 
 import citris.stockup.R;
@@ -25,6 +28,7 @@ public class GroceryListItem extends LinearLayout {
     private TextView color;
     private android.graphics.Typeface tf;
     private TextView check;
+    private TextView delete;
 
     public GroceryListItem(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -37,6 +41,7 @@ public class GroceryListItem extends LinearLayout {
         checkbox = (CheckedTextView)findViewById(android.R.id.text1);
         subtext = (TextView)findViewById(android.R.id.text2);
         color = (TextView) findViewById(R.id.bar);
+        delete = (TextView)findViewById(R.id.delete_button);
         check = (TextView) findViewById(R.id.check);
     }
 
@@ -55,9 +60,14 @@ public class GroceryListItem extends LinearLayout {
         }
         //checkbox.setTypeface(tf);
         checkbox.setText(grocery.getName());
-        check.setVisibility(View.INVISIBLE);
-        if(grocery.isComplete()) {
+        if (grocery.isComplete()) {
             check.setVisibility(View.VISIBLE);
+        } else {
+            check.setVisibility(View.INVISIBLE);
+        }
+        delete.setVisibility(View.INVISIBLE);
+        if(grocery.getDelete()) {
+            delete.setVisibility(View.VISIBLE);
         }
         subtext.setText("" + grocery.getBrand() + " - " + grocery.getQuantityInt() + " " + grocery.getQuantityType());
     }

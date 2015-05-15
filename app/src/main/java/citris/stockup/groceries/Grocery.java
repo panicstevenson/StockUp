@@ -64,9 +64,24 @@ public class Grocery implements Parcelable {
         list = table;
     }
 
+    public Grocery(String groceryName, int groceryQuantityInt, int groceryQuantityType, String groceryBrand, int groceryTTL, int groceryTTLType, String groceryCategory, Boolean comp, String identity, String table) {
+        name = groceryName;
+        quantityInt = groceryQuantityInt;
+        quantityType = groceryQuantityType;
+        brand = groceryBrand;
+        ttlInt = groceryTTL;
+        ttlType = groceryTTLType;
+        category = groceryCategory;
+        complete = comp;
+        ttl = convertTTL(groceryTTL, groceryTTLType);
+        id = identity;
+        list = table;
+    }
+
+
     //Parcelable
     public Grocery(Parcel in) {
-        String[] data = new String[9];
+        String[] data = new String[10];
         in.readStringArray(data);
         this.name = data[0];
         this.quantityInt = Integer.parseInt(data[1]);
@@ -75,8 +90,9 @@ public class Grocery implements Parcelable {
         this.ttlInt = Integer.parseInt(data[4]);
         this.ttlType = Integer.parseInt(data[5]);
         this.category = data[6];
-        this.id = data[7];
-        this.list = data[8];
+        this.complete = Boolean.parseBoolean(data[7]);
+        this.id = data[8];
+        this.list = data[9];
         this.ttl = convertTTL(Integer.parseInt(data[4]), Integer.parseInt(data[5]));
     }
 
@@ -87,7 +103,7 @@ public class Grocery implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{this.name, String.valueOf(this.quantityInt), String.valueOf(this.quantityType), this.brand, String.valueOf(this.ttlInt), String.valueOf(this.ttlType), this.category, this.id, this.list});
+        dest.writeStringArray(new String[]{this.name, String.valueOf(this.quantityInt), String.valueOf(this.quantityType), this.brand, String.valueOf(this.ttlInt), String.valueOf(this.ttlType), this.category, String.valueOf(this.complete), this.id, this.list});
     }
 
     public static final Parcelable.Creator<Grocery> CREATOR = new Parcelable.Creator<Grocery>() {

@@ -100,4 +100,9 @@ public class GroceryListAdapter extends BaseAdapter{
         }
         notifyDataSetChanged();
     }
+
+    public void remove(int position) {
+        groceries.remove(position);
+        notifyDataSetChanged();
+    }
 }

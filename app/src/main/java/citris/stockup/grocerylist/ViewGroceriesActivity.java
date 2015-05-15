@@ -10,12 +10,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+
+import org.w3c.dom.Text;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,6 +38,11 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
     private SearchView searchView;
     private Timer mTimer;
     private TextView test;
+    private Button suggestButton;
+    private ImageButton suggestImage;
+    private TextView suggestOpacity;
+    private Boolean suggestOpen = false;
+    private int suggestCycle = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,37 +95,27 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
                                 .duration(650)
                                 .playOn(finalView);
                         mTimer = new Timer();
+
+                        //Wait for animation to complete to delete
                         mTimer.schedule(new TimerTask() {
                             @Override
                             public void run() {
-                                boolean tmp = false;
-                                if (position > 0) {
-                                    tmp = app.getCurrentGroceries().get(position - 1).getDelete();
-                                }
-                                final boolean finalTmp = tmp;
                                 app.removeGrocery(position);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        adapter.notifyDataSetChanged();
-                                        app.getCurrentGroceries().get(position - 1).setDelete(finalTmp);
-                                        if (finalTmp) {
-                                            finalView.findViewById(R.id.delete_button)
-                                                    .setVisibility(View.VISIBLE);
-                                        } else {
-                                            finalView.findViewById(R.id.delete_button)
-                                                    .setVisibility(View.INVISIBLE);
-                                        }
-                                        finalView.findViewById(R.id.delete_button).setClickable(finalTmp);
+                                        //Can only alter adapter from runOnUiThread
+                                        adapter.remove(position);
                                         finalView.setTranslationX(0);
                                     }
                                 });
                                 mTimer = null;
                             }
                         }, 700);
+                        //View will remain invisible, bring it back with a YoYo animation
                         YoYo.with(Techniques.FadeIn)
                                 .duration(1)
-                                .delay(651)
+                                .delay(650)
                                 .playOn(finalView);
                     }
                 });
@@ -230,8 +228,51 @@ public class ViewGroceriesActivity extends ListActivity implements SearchView.On
         checkoutButton = (Button)findViewById(R.id.checkout);
         checkoutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                app.checkout();
-                finish();
+                if (!suggestOpen) {
+                    app.checkout();
+                    finish();
+                }
+            }
+        });
+
+        suggestButton = (Button)findViewById(R.id.suggest_grocery);
+        suggestImage = (ImageButton)findViewById(R.id.suggest_image);
+        suggestOpacity = (TextView)findViewById(R.id.suggest_opacity);
+        suggestButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                YoYo.with(Techniques.BounceInRight)
+                        .duration(1200)
+                        .playOn(suggestImage);
+                YoYo.with(Techniques.FadeIn)
+                        .duration(400)
+                        .playOn(suggestOpacity);
+                suggestImage.setVisibility(View.VISIBLE);
+                suggestOpacity.setVisibility(View.VISIBLE);
+                suggestOpacity.setClickable(true);
+                suggestOpen = true;
+            }
+        });
+
+        suggestOpacity.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                suggestImage.setVisibility(View.INVISIBLE);
+                suggestOpacity.setVisibility(View.INVISIBLE);
+                suggestOpacity.setClickable(false);
+                suggestOpen = false;
+                switch (suggestCycle) {
+                    case 0:
+                        suggestImage.setBackgroundDrawable(getResources().getDrawable(R.drawable.salad));
+                        suggestCycle++;
+                        break;
+                    case 1:
+                        suggestImage.setBackgroundDrawable(getResources().getDrawable(R.drawable.kabob));
+                        suggestCycle++;
+                        break;
+                    case 2:
+                        suggestImage.setBackgroundDrawable(getResources().getDrawable(R.drawable.carbonara));
+                        suggestCycle = 0;
+                        break;
+                }
             }
         });
     }
